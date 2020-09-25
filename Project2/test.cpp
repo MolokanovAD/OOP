@@ -5,18 +5,20 @@
 const double error = 0.0001;
 //Constructor
 TEST(StrophoidConstructor, DefaultConstructor) {
-  Project2::Strophoid a1;
-  ASSERT_EQ(1, a1.getA());
+  Project2::Strophoid a;
+  ASSERT_EQ(1, a.getA());
 }
 TEST(StrophoidConstructor, InitConstructor) {
-    Project2::Strophoid a2(-1);
-    ASSERT_EQ(-1, a2.getA());
+    Project2::Strophoid a(-1);
+    ASSERT_EQ(-1, a.getA());
+    ASSERT_ANY_THROW(Project2::Strophoid aa(0));
 }
 //Setter
 TEST(StrophoidMethods, InitConstructor) {
     Project2::Strophoid a;
     a.setA(5);
     ASSERT_EQ(5, a.getA());
+    ASSERT_ANY_THROW(a.setA(0));
 }
 //Other Methods
 TEST(StrophoidMethods, CurvRad) {
@@ -57,8 +59,6 @@ TEST(StrophoidMethods, formula) {
     ASSERT_STREQ("y ^ 2 * (x + 18.00) + x ^ 2 * (x - 18.00) = 0", a.formula());
     a.setA(10);
     ASSERT_STREQ("y ^ 2 * (x - 10.00) + x ^ 2 * (x + 10.00) = 0", a.formula());
-    a.setA(0);
-    ASSERT_STREQ("y ^ 2 * x + x ^ 3 = 0", a.formula());
 }
 //
 int _tmain(int argc, char* argv[]) {
