@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
 	double A;
 	char* s = NULL;
 	while (fl1) {
-		std::cout << "Your circle is:" << std::endl;
+		std::cout << "Your strophoid is:" << std::endl;
 		s = STR.formula();
 		std::cout << s << std::endl;
 		delete[] s;
@@ -54,12 +54,23 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		std::cin.clear();
-		std::cout << "Enter new coefficient to continue or press ctrl+Z to quit:" << std::endl;
-		std::cin >> A;
-		if (std::cin.good())
-			STR.setA(A);
-		else
-			fl1 = 0;
+		A = 0;
+		do {
+			std::cout << "Enter new coefficient to continue or press ctrl+Z to quit:" << std::endl;
+			std::cin >> A;
+			fl2 = 0;
+			if (std::cin.good()) {
+				try {
+					STR.setA(A);
+				}
+				catch (std::exception & ex) {
+					std::cout << ex.what() << std::endl;
+					fl2 = 1;
+				}
+			}
+			else
+				fl1 = 0;
+		} while (fl2);
 	}
 	return 0;
 }
