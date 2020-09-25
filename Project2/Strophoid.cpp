@@ -5,8 +5,19 @@
 double const PI = 3.1415926535;
 
 namespace Project2 {
+	Strophoid::Strophoid(double par){
+		if(par == 0)
+			throw std::exception("Invalid parameter");
+		a = par;
+	}
 	double plus() { return 2 + PI / 2; }
 	double minus() { return 2 - PI / 2; }
+	Strophoid& Strophoid::setA(double par) {
+		if (par == 0)
+			throw std::exception("Invalid parameter");
+		a = par; 
+		return *this; 
+	}
 	double Strophoid::dist(double x) const { 
 		if(x >= 360 || x < 0)
 			throw std::exception("Invalid angle");
@@ -29,9 +40,6 @@ namespace Project2 {
 		if (a < 0)
 			if (x > (-1)*a || x <= a)
 				throw std::exception("Invalid x");
-		if (a==0)
-			if(x !=0)
-				throw std::exception("Invalid x");
 		if (a == x || (-1) * a == x)
 			return 0;
 		return x * sqrt((a + x) / (a - x));
@@ -43,23 +51,16 @@ namespace Project2 {
 		sprintf_s(num, 20, "%.2f", a);
 		l += strlen(num)*2;
 		char* s = new char[l];
-		if (a == 0) {
-			sprintf_s(s, l, "y ^ 2 * x");
+		if (a < 0) {
+			double val = (-1)*a;
+			sprintf_s(s, l, "y ^ 2 * (x + %.2f)", val);
 			int k = strlen(s);
-			sprintf_s(s + k, l - k, " + x ^ 3 = 0");
+			sprintf_s(s + k, l - k, " + x ^ 2 * (x - %.2f) = 0", val);
 		}
 		else {
-			if (a < 0) {
-				double val = (-1)*a;
-				sprintf_s(s, l, "y ^ 2 * (x + %.2f)", val);
-				int k = strlen(s);
-				sprintf_s(s + k, l - k, " + x ^ 2 * (x - %.2f) = 0", val);
-			}
-			else {
-				sprintf_s(s, l, "y ^ 2 * (x - %.2f)", a);
-				int k = strlen(s);
-				sprintf_s(s + k, l - k, " + x ^ 2 * (x + %.2f) = 0", a);
-			}
+			sprintf_s(s, l, "y ^ 2 * (x - %.2f)", a);
+			int k = strlen(s);
+			sprintf_s(s + k, l - k, " + x ^ 2 * (x + %.2f) = 0", a);
 		}
 		return s;
 	}
