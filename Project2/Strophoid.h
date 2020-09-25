@@ -7,8 +7,8 @@ namespace Project2 {
 	private: 
 		double a;
 	public:
-		Strophoid(double parameter = 1.0) : a(parameter) {};
-		Strophoid& setA(double aa) { a = aa; return *this; };
+		Strophoid(double parameter = 1.0);
+		Strophoid& setA(double aa);
 		double getA() const{ return a; };
 		double findY(double x) const;
 		double dist(double x) const;
