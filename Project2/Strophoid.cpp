@@ -29,6 +29,9 @@ namespace Project2 {
 		if (a < 0)
 			if (x > (-1)*a || x <= a)
 				throw std::exception("Invalid x");
+		if (a==0)
+			if(x !=0)
+				throw std::exception("Invalid x");
 		if (a == x || (-1) * a == x)
 			return 0;
 		return x * sqrt((a + x) / (a - x));
