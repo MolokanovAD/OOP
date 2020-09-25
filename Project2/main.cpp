@@ -66,6 +66,7 @@ int main(int argc, char* argv[]) {
 				catch (std::exception & ex) {
 					std::cout << ex.what() << std::endl;
 					fl2 = 1;
+					continue;
 				}
 			}
 			else
