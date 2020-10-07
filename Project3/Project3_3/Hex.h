@@ -5,7 +5,7 @@ const int len = 32;
 namespace Project3_3 {
 	class Hex {
 	private:
-		unsigned char length;
+		int length;
 		char* number;
 	public:
 		Hex();
