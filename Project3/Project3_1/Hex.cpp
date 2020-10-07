@@ -37,6 +37,8 @@ namespace Project3_1 {
 	}
 	Hex& Hex::setN(char* a) {
 		int leng = strlen(a), i = 0;
+		if(!leng)
+			throw std::exception("Wrong data");
 		if (leng > (len + 2)) {
 			a[len + 2] = '\0';
 			leng = len + 1;
