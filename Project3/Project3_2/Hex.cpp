@@ -5,12 +5,12 @@
 
 
 namespace Project3_2 {
-	Hex::Hex() { //Ïóñòîé êîíñòðóêòîð
+	Hex::Hex() { //Пустой конструктор
 		length = 1;
 		for(int i = 0; i < len; i++)
 			number[i] = '0';
 	}
-	Hex::Hex(char* a) {//Èíèöèàëèçèðóþùèé êîíñòðóêòîð äëÿ èíèöèàëèçàöèè ñòðîêîé
+	Hex::Hex(char* a) {//Инициализирующий конструктор для инициализации строкой
 		try {
 			setN(a);
 		}
@@ -18,7 +18,7 @@ namespace Project3_2 {
 			throw std::exception("Wrong data");
 		}
 	}
-	Hex::Hex(const int A) { //Èíèöèàëèçèðóþùèé êîíñòðóêòîð äëÿ èíèöèàëèçàöèè êîíñòàíòîé
+	Hex::Hex(const int A) { //Инициализирующий конструктор для инициализации константой
 		int a = A;
 		if (a < 0) {
 			number[0] = 'F';
@@ -40,7 +40,7 @@ namespace Project3_2 {
 	}
 	Hex& Hex::setN(char* a) {
 		int leng = strlen(a), i = 0;
-		switch (a[0]) {//Ïðîâåðêà çíàêà
+		switch (a[0]) {//Проверка знака
 		case '+':
 			i++;
 			break;
@@ -51,17 +51,17 @@ namespace Project3_2 {
 		default:
 			number[0] = '0';
 		}
-		if (a[i] == '0' && a[i + 1] == 'x')//ïðîâåðêà ââîäà ÷èñëà, íà÷èíàþùåãîñÿ ñ 0õ
+		if (a[i] == '0' && a[i + 1] == 'x')//проверка ввода числа, начинающегося с 0х
 			i += 2;
-		int ll = len - leng + i;//ìåñòî, ñ êîòîðîãî íà÷èíàåì ââîäèòü ÷èñëî â ìàññèâ
+		int ll = len - leng + i;//место, с которого начинаем вводить число в массив
 		if (ll < 1)
 			ll = 1;
-		for (int j = 1; j < ll; j++)// çàïîëíÿåì ìàññèâ íóëÿìè äî çíà÷àùèõ öèôð
+		for (int j = 1; j < ll; j++)// заполняем массив нулями до значащих цифр
 			number[j] = '0';
 		length = ((leng - i) > 31) ? 31 : leng - i;
 		for (; i < leng && ll < len; i++, ll++) {
-			a[i] = upper(a[i]); //ïðîâåðêà ðåãèñòðà
-			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//ïðîâåðêà ïîïàäàíèÿ ñèìâîëà â äèàïàçîí øåñòíàäöàòèðè÷íûõ öèôð
+			a[i] = upper(a[i]); //проверка регистра
+			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//проверка попадания символа в диапазон шестнадцатиричных цифр
 				throw std::exception("Invalid symbol");
 			number[ll] = a[i];
 		}
@@ -120,48 +120,48 @@ namespace Project3_2 {
 		}
 		return -1;
 	}
-	int Hex::Check() { //ïðîâåðêà ÷åòíîñòè
+	int Hex::Check() const { //проверка четности
 		if (CharToHex(number[31])&1)
 			return 0;
 		return 1;
 	}
 	char Hex::Compare(const Hex& N) {
-		if (this->number[0] < N.number[0]) //ñíà÷àëà ïðîâåðêà íà ðàçíûå çíàêè
+		if (this->number[0] < N.number[0]) //сначала проверка на разные знаки
 			return '>';
 		if (this->number[0] > N.number[0])
 			return '<';
 		int l = this->length,flag = 0;
-		for (int i = len - l; i < len; i++) { //âûÿâëÿåì ìîäóëü êàêîãî ÷èñëà áîëüøå
+		for (int i = len - l; i < len; i++) { //выявляем модуль какого числа больше
 			if (this->number[i] > N.number[i])
 				i = len, flag = 1;
 			if (N.number[i] > this->number[i])
 				i = len,flag = -1;
 		}
 		char sign = this->getSign();
-		if (sign == '0') { //åñëè ÷èñëî ïîëîæèòåëüíîå, òî áîëüøå òî, ìîäóëü êîòîðîãî áîëüøå
+		if (sign == '0') { //если число положительное, то больше то, модуль которого больше
 			if (flag == 1)
 				return '>';
 			if (flag == -1)
 				return '<';
 		}
-		if (flag == 1)//åñëè ÷èñëî îòðèöàòåëüíîå, òî áîëüøå òî, ìîäóëü êîòîðîãî ìåíüøå
+		if (flag == 1)//если число отрицательное, то больше то, модуль которого меньше
 			return '<';
 		if (flag == -1)
 			return '>';
 		return '=';
 	}
 	Hex& Hex::Convert() {
-		for (int i = 1; i < len; i++) { //èíâåðèòðóåì âñå ðàçðÿäû
+		for (int i = 1; i < len; i++) { //инверитруем все разряды
 			int n = 0xF - CharToHex(this->number[i]);
 			this->number[i] = HexToChar(n);
 		}
 		int l = len-1;
-		while (l > 0 && this->number[l] == 'F') // ïîèñê ìåñòà äëÿ äîáàâëåíèÿ åäèíèöû
+		while (l > 0 && this->number[l] == 'F') // поиск места для добавления единицы
 			l--;
-		if (l == 0) // åñëè ìåñòà íåò ïðîèçîøëî ïåðåïîëíåíèå
+		if (l == 0) // если места нет произошло переполнение
 			throw std::exception("Incorrect operand");
 		int k = CharToHex(this->number[l]) + 1;
-		this->number[l] = HexToChar(k); //äîáàâëÿåì åäèíèöó â íàéäåííîå ìåñòî
+		this->number[l] = HexToChar(k); //добавляем единицу в найденное место
 		for (int i = l + 1; i < len; i++)
 			this->number[i] = '0';
 		return *this;
@@ -198,7 +198,7 @@ namespace Project3_2 {
 	}
 	const Hex Hex::operator -(const Hex& N) {
 		Hex second = N,res;
-		if (second.number[0] == '0') //äîìíîæàåì âòîðîé îïåðàíä íà -1
+		if (second.number[0] == '0') //домножаем второй операнд на -1
 			second.number[0] = 'F';
 		else
 			second.number[0] = '0';
@@ -218,10 +218,10 @@ namespace Project3_2 {
 		}
 		for (int i = len - length; i < len; i++)
 			if ((i - a) > 0)
-				number[i - a] = number[i]; //ïåðåìåùåíèå öèôð íà íîâîå ìåñòî, åñëè ýòî âîçìîæíî
+				number[i - a] = number[i]; //перемещение цифр на новое место, если это возможно
 		for (int i = 0; i < a; i++)
-			number[len - i - 1] = '0'; //äîïîëíåíèå íóëÿìè ÷èñëà ñïðàâà
-		length += a; // êîððåêöèÿ äëèíû ÷èñëà
+			number[len - i - 1] = '0'; //дополнение нулями числа справа
+		length += a; // коррекция длины числа
 		if (length > 31)
 			length = 31;
 		return *this;
@@ -235,7 +235,7 @@ namespace Project3_2 {
 		int stop = len - length;
 		for (int i = len - 1; i >= stop; i--) {
 			if ((i + a) < len)
-				this->number[i + a] = this->number[i];//ïåðåìåùåíèå öèôð íà íîâîå ìåñòî, åñëè ýòî âîçìîæíî
+				this->number[i + a] = this->number[i];//перемещение цифр на новое место, если это возможно
 			this->number[i] = '0';
 		}
 		length -= a;
@@ -270,7 +270,7 @@ namespace Project3_2 {
 	std::ostream& operator <<(std::ostream& c, const Hex& El) {
 		if (El.number[0] == 'F')
 			c << "-";
-		int j = len - El.length;//ìåñòî, ñ êîòîðîãî íà÷èíàþòñÿ íåíóëåâûå ýëåìåíòû
+		int j = len - El.length;//место, с которого начинаются ненулевые элементы
 		for (; j < len; j++)
 			c << El.number[j];
 		return c;
