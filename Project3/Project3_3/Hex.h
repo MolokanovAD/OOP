@@ -14,8 +14,8 @@ namespace Project3_3 {
 		Hex(const Hex&);
 		Hex& setN(char*);
 		void Formate(int);
-		char getSign() { return number[0]; }
-		int Check();
+		char getSign() const{ return number[0]; }
+		int Check() const;
 		Hex& Convert();
 		const Hex operator +(const Hex&);
 		const Hex operator -(const Hex&);
