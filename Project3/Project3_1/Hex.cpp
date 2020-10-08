@@ -124,7 +124,7 @@ namespace Project3_1 {
 		}
 		return -1;
 	}
-	int Hex::Check() { //проверка четности
+	int Hex::Check() const{ //проверка четности
 		if (CharToHex(number[31]) & 1)
 			return 0;
 		return 1;
