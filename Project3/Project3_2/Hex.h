@@ -12,8 +12,8 @@ namespace Project3_2 {
 		Hex(char*);
 		Hex(const int);
 		Hex& setN(char*);
-		char getSign() { return number[0]; }
-		int Check();
+		char getSign() const{ return number[0]; }
+		int Check() const;
 		Hex& Convert();
 		const Hex operator +(const Hex&);
 		const Hex operator -(const Hex&);
