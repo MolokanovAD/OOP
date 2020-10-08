@@ -5,13 +5,13 @@
 
 
 namespace Project3_3 {
-	Hex::Hex() { //Пустой конструктор
+	Hex::Hex() { //РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 		length = 1;
 		number = new char[2];
 		number[0] = '0';
 		number[1] = '0';
 	}
-	Hex::Hex(char* a) {//Инициализирующий конструктор для инициализации строкой
+	Hex::Hex(char* a) {//РРЅРёС†РёР°Р»РёР·РёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃС‚СЂРѕРєРѕР№
 		try {
 			setN(a);
 		}
@@ -19,7 +19,7 @@ namespace Project3_3 {
 			throw std::exception("Wrong data");
 		}
 	}
-	Hex::Hex(const int A) { //Инициализирующий конструктор для инициализации константой
+	Hex::Hex(const int A) { //РРЅРёС†РёР°Р»РёР·РёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєРѕРЅСЃС‚Р°РЅС‚РѕР№
 		int a = A,b = A,size = 0;
 		char sign = '0';
 		if (a < 0) {
@@ -67,7 +67,7 @@ namespace Project3_3 {
 	Hex& Hex::setN(char* a) {
 		int leng = strlen(a), i = 0;
 		char sign = '0';
-		switch (a[0]) {//Проверка знака
+		switch (a[0]) {//РџСЂРѕРІРµСЂРєР° Р·РЅР°РєР°
 		case '+':
 			i++;
 			break;
@@ -78,19 +78,24 @@ namespace Project3_3 {
 		default:
 			sign = '0';
 		}
-		if (a[i] == '0' && a[i + 1] == 'x')//проверка ввода числа, начинающегося с 0х
+		if (a[i] == '0' && a[i + 1] == 'x')//РїСЂРѕРІРµСЂРєР° РІРІРѕРґР° С‡РёСЃР»Р°, РЅР°С‡РёРЅР°СЋС‰РµРіРѕСЃСЏ СЃ 0С…
 			i += 2;
 		int size = leng - i + 1;
 		/*if(size > 32)
 			size = 32;*/
-		number = new char[size];
+		try {
+			number = new char[size];
+		}
+		catch (std::exception & a) {
+			throw std::exception("Memory allocation error");
+		}
 		number[0] = sign;
 		int ll = 1;
 		//length = ((leng - i) > 31) ? 31 : leng - i;
 		length = size - 1;
 		for (; i < leng/* && ll < size*/; i++, ll++) {
-			a[i] = upper(a[i]); //проверка регистра
-			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//проверка попадания символа в диапазон шестнадцатиричных цифр
+			a[i] = upper(a[i]); //РїСЂРѕРІРµСЂРєР° СЂРµРіРёСЃС‚СЂР°
+			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//РїСЂРѕРІРµСЂРєР° РїРѕРїР°РґР°РЅРёСЏ СЃРёРјРІРѕР»Р° РІ РґРёР°РїР°Р·РѕРЅ С€РµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹С… С†РёС„СЂ
 				throw std::exception("Invalid symbol");
 			number[ll] = a[i];
 		}
@@ -149,14 +154,14 @@ namespace Project3_3 {
 		}
 		return -1;
 	}
-	int Hex::Check() { //проверка четности
+	int Hex::Check() const { //РїСЂРѕРІРµСЂРєР° С‡РµС‚РЅРѕСЃС‚Рё
 		if (CharToHex(number[length]) & 1)
 			return 0;
 		return 1;
 	}
 	char Hex::Compare(const Hex& N) {
 		Hex S(N),F(*this);
-		if (number[0] < N.number[0]) //сначала проверка на разные знаки
+		if (number[0] < N.number[0]) //СЃРЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂРєР° РЅР° СЂР°Р·РЅС‹Рµ Р·РЅР°РєРё
 			return '>';
 		if (number[0] > N.number[0])
 			return '<';
@@ -167,7 +172,7 @@ namespace Project3_3 {
 		}
 		else
 			S.Formate(length - S.length);
-		for (int i = 1; i <= l; i++) { //выявляем модуль какого числа больше
+		for (int i = 1; i <= l; i++) { //РІС‹СЏРІР»СЏРµРј РјРѕРґСѓР»СЊ РєР°РєРѕРіРѕ С‡РёСЃР»Р° Р±РѕР»СЊС€Рµ
 			if (F.number[i] > S.number[i]) {
 				i = l + 1;
 				flag = 1;
@@ -177,30 +182,30 @@ namespace Project3_3 {
 				i = l+1, flag = -1;
 		}
 		char sign = F.getSign();
-		if (sign == '0') { //если число положительное, то больше то, модуль которого больше
+		if (sign == '0') { //РµСЃР»Рё С‡РёСЃР»Рѕ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ, С‚Рѕ Р±РѕР»СЊС€Рµ С‚Рѕ, РјРѕРґСѓР»СЊ РєРѕС‚РѕСЂРѕРіРѕ Р±РѕР»СЊС€Рµ
 			if (flag == 1)
 				return '>';
 			if (flag == -1)
 				return '<';
 		}
-		if (flag == 1)//если число отрицательное, то больше то, модуль которого меньше
+		if (flag == 1)//РµСЃР»Рё С‡РёСЃР»Рѕ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ, С‚Рѕ Р±РѕР»СЊС€Рµ С‚Рѕ, РјРѕРґСѓР»СЊ РєРѕС‚РѕСЂРѕРіРѕ РјРµРЅСЊС€Рµ
 			return '<';
 		if (flag == -1)
 			return '>';
 		return '=';
 	}
 	Hex& Hex::Convert() {
-		for (int i = 1; i <= length; i++) { //инверитруем все разряды кроме знакового
+		for (int i = 1; i <= length; i++) { //РёРЅРІРµСЂРёС‚СЂСѓРµРј РІСЃРµ СЂР°Р·СЂСЏРґС‹ РєСЂРѕРјРµ Р·РЅР°РєРѕРІРѕРіРѕ
 			int n = 0xF - CharToHex(number[i]);
 			number[i] = HexToChar(n);
 		}
 		int l = length;
-		while (l > 0 && number[l] == 'F') // поиск места для добавления единицы
+		while (l > 0 && number[l] == 'F') // РїРѕРёСЃРє РјРµСЃС‚Р° РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ РµРґРёРЅРёС†С‹
 			l--;
-		if (l == 0) // если места нет произошло переполнение
+		if (l == 0) // РµСЃР»Рё РјРµСЃС‚Р° РЅРµС‚ РїСЂРѕРёР·РѕС€Р»Рѕ РїРµСЂРµРїРѕР»РЅРµРЅРёРµ
 			throw std::exception("Incorrect operand");
 		int k = CharToHex(number[l]) + 1;
-		number[l] = HexToChar(k); //добавляем единицу в найденное место
+		number[l] = HexToChar(k); //РґРѕР±Р°РІР»СЏРµРј РµРґРёРЅРёС†Сѓ РІ РЅР°Р№РґРµРЅРЅРѕРµ РјРµСЃС‚Рѕ
 		for (int i = l + 1; i <= length; i++)
 			number[i] = '0';
 		return *this;
@@ -214,13 +219,13 @@ namespace Project3_3 {
 		F.Formate(l - F.length);
 		Second.Formate(l - Second.length);
 		Hex res(F);
-		if (F.number[0] == 'F') //перевод чисел в дополнительный код при надобности
+		if (F.number[0] == 'F') //РїРµСЂРµРІРѕРґ С‡РёСЃРµР» РІ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ РєРѕРґ РїСЂРё РЅР°РґРѕР±РЅРѕСЃС‚Рё
 			F.Convert();
 		if (Second.number[0] == 'F')
 			Second.Convert();
-		int transfer = 0;// transfer - перенос из младшего разряда
+		int transfer = 0;// transfer - РїРµСЂРµРЅРѕСЃ РёР· РјР»Р°РґС€РµРіРѕ СЂР°Р·СЂСЏРґР°
 		res.number = new char[l + 1];
-		for (int i = F.length; i > -1; i--) { //сложение чисел
+		for (int i = F.length; i > -1; i--) { //СЃР»РѕР¶РµРЅРёРµ С‡РёСЃРµР»
 			int sum = CharToHex(F.number[i]) + CharToHex(Second.number[i]) + transfer;
 			res.number[i] = HexToChar((sum) % 0x10);
 			transfer = 0;
@@ -228,11 +233,11 @@ namespace Project3_3 {
 				transfer = 1;
 		}
 		/*if (F.number[0] == Second.number[0] && Second.number[0] != res.number[0])
-			throw std::exception("Overload"); //если знаки исходных чисел равны, а знак результата от них отличается - произошло переполнение*/
+			throw std::exception("Overload"); //РµСЃР»Рё Р·РЅР°РєРё РёСЃС…РѕРґРЅС‹С… С‡РёСЃРµР» СЂР°РІРЅС‹, Р° Р·РЅР°Рє СЂРµР·СѓР»СЊС‚Р°С‚Р° РѕС‚ РЅРёС… РѕС‚Р»РёС‡Р°РµС‚СЃСЏ - РїСЂРѕРёР·РѕС€Р»Рѕ РїРµСЂРµРїРѕР»РЅРµРЅРёРµ*/
 		if (res.number[0] == 'F')
 			res.Convert();
 		int k = 1;
-		while (res.number[k] == '0') //вычисление длины результата
+		while (res.number[k] == '0') //РІС‹С‡РёСЃР»РµРЅРёРµ РґР»РёРЅС‹ СЂРµР·СѓР»СЊС‚Р°С‚Р°
 			k++;
 		res.length = l + 1 - k;
 		char* buf = res.number;
@@ -249,7 +254,7 @@ namespace Project3_3 {
 	}
 	const Hex Hex::operator -(const Hex& N) {
 		Hex second = N, res;
-		if (second.number[0] == '0') //домножаем второй операнд на -1
+		if (second.number[0] == '0') //РґРѕРјРЅРѕР¶Р°РµРј РІС‚РѕСЂРѕР№ РѕРїРµСЂР°РЅРґ РЅР° -1
 			second.number[0] = 'F';
 		else
 			second.number[0] = '0';
@@ -300,7 +305,12 @@ namespace Project3_3 {
 			}
 			if (n > 0) {
 				l += strlen(buf);
-				s = (char*)realloc(s, l + 1);
+				try {
+					s = (char*)realloc(s, l + 1);
+				}
+				catch (std::exception & a) {
+					throw std::exception("Memory allocation error");
+				}
 				strcat_s(s, l + 1, buf);
 			}
 			else
