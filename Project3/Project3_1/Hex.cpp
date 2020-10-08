@@ -19,18 +19,18 @@ namespace Project3_1 {
 		int a = A;
 		if (a < 0) {
 			number[0] = 'F';
-			a *= -1;
+			a = -a;
 		}
 		else
 			number[0] = '0';
 		int i = 0;
 		i = len - 1;
-		for (int j = 1; j < len; j++)
-			number[j] = '0';
 		for (; a; i--) {
-			number[i] = HexToChar(a % 0x10);
+			number[i] = HexToChar(a & 0xf);
 			a >>= 4;
 		}
+		for (int j = 1; j <= i; j++)
+			number[j] = '0';
 		length = len - i - 1;
 		if (!length)
 			length = 1;
