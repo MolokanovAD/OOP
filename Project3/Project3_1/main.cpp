@@ -83,7 +83,13 @@ int main() {
 					std::cout << b.what() << std::endl;
 					continue;
 				}
-				a.Move_r(r);
+				try {
+					a.Move_r(r);
+				}
+				catch (std::exception & b) {
+					std::cout << b.what() << std::endl;
+					continue;
+				}
 				a.Print(std::cout);
 				std::cout << std::endl;
 				break;
@@ -96,7 +102,13 @@ int main() {
 					std::cout << b.what() << std::endl;
 					continue;
 				}
-				a.Move_l(r);
+				try {
+					a.Move_l(r);
+				}
+				catch (std::exception & b) {
+					std::cout << b.what() << std::endl;
+					continue;
+				}
 				a.Print(std::cout);
 				std::cout << std::endl;
 				break;
