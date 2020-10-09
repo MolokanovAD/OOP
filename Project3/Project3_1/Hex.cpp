@@ -68,6 +68,12 @@ namespace Project3_1 {
 				throw std::exception("Invalid symbol");
 			number[ll] = a[i];
 		}
+		if (leng - i > 31)
+			std::cout << "Only first 31 digit will be read" << std::endl;
+		if (number[0] == 'F' && length == 1 && number[len - 1] == '0') {
+			Hex c;
+			*this = c;
+		}
 		free(a);
 		return *this;
 	}
