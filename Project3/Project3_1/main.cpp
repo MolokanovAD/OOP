@@ -76,11 +76,10 @@ int main() {
 			case 1:
 				int r;
 				std::cout << "Enter number of digits" << std::endl;
-				try {
-					std::cin >> r;
-				}
-				catch (std::exception & b) {
-					std::cout << b.what() << std::endl;
+				std::cin >> r;
+				if (!std::cin.good()) {
+					std::cout << "Incorrect input" << std::endl;
+					k = 5;
 					continue;
 				}
 				try {
@@ -95,11 +94,9 @@ int main() {
 				break;
 			case 2:
 				std::cout << "Enter number of digits" << std::endl;
-				try {
-					std::cin >> r;
-				}
-				catch (std::exception & b) {
-					std::cout << b.what() << std::endl;
+				if (!std::cin.good()) {
+					std::cout << "Incorrect input" << std::endl;
+					k = 5;
 					continue;
 				}
 				try {
