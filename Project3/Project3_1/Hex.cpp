@@ -242,6 +242,8 @@ namespace Project3_1 {
 			*this = a;
 			return *this;
 		}
+		if (a == 0)
+			return *this;
 		int stop = len - length;
 		for (int i = len - 1; i >= stop; i--) {
 			if ((i + a) < len)
