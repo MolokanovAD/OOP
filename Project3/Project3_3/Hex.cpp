@@ -1,8 +1,6 @@
-#include "Hex.h"
+nclude "Hex.h"
 #include <iostream>
 #include <stdio.h>
-
-
 
 namespace Project3_3 {
 	Hex::Hex() { //Пустой конструктор
@@ -262,6 +260,8 @@ namespace Project3_3 {
 		return res;
 	}
 	Hex& Hex::operator <<=(int a) {
+		if (a < 0)
+			return *this;
 		int l = length;
 		length += a;
 		char* buf = number;
@@ -274,6 +274,8 @@ namespace Project3_3 {
 		return *this;
 	}
 	Hex& Hex::operator >>=(int a) {
+		if (a < 0)
+			return *this;
 		if (a >= length) {
 			Hex a(0);
 			*this = a;
@@ -309,7 +311,8 @@ namespace Project3_3 {
 					s = (char*)realloc(s, l + 1);
 				}
 				catch (std::exception & a) {
-					throw std::exception("Memory allocation error");
+					c.setstate(std::ios::failbit);
+					return c;
 				}
 				strcat_s(s, l + 1, buf);
 			}
@@ -332,3 +335,4 @@ namespace Project3_3 {
 		return c;
 	}
 }
+
