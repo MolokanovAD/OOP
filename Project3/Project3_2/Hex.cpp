@@ -1,8 +1,3 @@
-#include "Hex.h"
-#include <iostream>
-#include <stdio.h>
-
-
 
 namespace Project3_2 {
 	Hex::Hex() { //Пустой конструктор
@@ -216,6 +211,8 @@ namespace Project3_2 {
 			*this = a;
 			return *this;
 		}
+		if (a <= 0)
+			return *this;
 		for (int i = len - length; i < len; i++)
 			if ((i - a) > 0)
 				number[i - a] = number[i]; //перемещение цифр на новое место, если это возможно
@@ -232,7 +229,7 @@ namespace Project3_2 {
 			*this = a;
 			return *this;
 		}
-		if (a == 0)
+		if (a <= 0)
 			return *this;
 		int stop = len - length;
 		for (int i = len - 1; i >= stop; i--) {
