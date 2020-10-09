@@ -60,7 +60,10 @@ int main() {
 					continue;
 				}
 				a >>= r;
-				std::cout << a << std::endl;
+				if(r < 0)
+					std::cout << "Invalid input" << std::endl;
+				else
+					std::cout << a << std::endl;
 				break;
 			case 2:
 				std::cout << "Enter number of digits" << std::endl;
@@ -72,7 +75,10 @@ int main() {
 					continue;
 				}
 				a <<= r;
-				std::cout << a << std::endl;
+				if (r < 0)
+					std::cout << "Invalid input" << std::endl;
+				else
+					std::cout << a << std::endl;
 				break;
 			case 3:
 				std::cout << a << " " << a.Compare(b) << " " << b << std::endl;
