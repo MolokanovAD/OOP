@@ -8,7 +8,7 @@ namespace Project3_1 {
 			number[i] = '0';
 	}
 	Hex::Hex(char* a) { //Инициализирующий конструктор для инициализации строкой
-		try{
+		try {
 			setN(a);
 		}
 		catch (std::exception & a) {
@@ -37,7 +37,7 @@ namespace Project3_1 {
 	}
 	Hex& Hex::setN(char* a) {
 		int leng = strlen(a), i = 0;
-		if(!leng)
+		if (!leng)
 			throw std::exception("Wrong data");
 		if (leng > (len + 2)) {
 			a[len + 2] = '\0';
@@ -62,11 +62,11 @@ namespace Project3_1 {
 		for (int j = 1; j < ll; j++)// заполняем массив нулями до значащих цифр
 			number[j] = '0';
 		length = ((leng - i) > 31) ? 31 : leng - i;
-		for (; i < leng && ll < len; i++, ll++) {
-			a[i] = upper(a[i]); //проверка регистра
-			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//проверка попадания символа в диапазон шестнадцатиричных цифр
+		for (int j = i; j < leng && ll < len; j++, ll++) {
+			a[j] = upper(a[j]); //проверка регистра
+			if ((a[j] < '0' || ('9' < a[j] && a[j] < 'A') || 'F' < a[j]))//проверка попадания символа в диапазон шестнадцатиричных цифр
 				throw std::exception("Invalid symbol");
-			number[ll] = a[i];
+			number[ll] = a[j];
 		}
 		if (leng - i > 31)
 			std::cout << "Only first 31 digit will be read" << std::endl;
@@ -130,7 +130,7 @@ namespace Project3_1 {
 		}
 		return -1;
 	}
-	int Hex::Check() const{ //проверка четности
+	int Hex::Check()const { //проверка четности
 		if (CharToHex(number[31]) & 1)
 			return 0;
 		return 1;
@@ -177,7 +177,7 @@ namespace Project3_1 {
 		return *this;
 	}
 	const Hex Hex::Add(const Hex& N) {
-		Hex Second = N, res,First = *this;
+		Hex Second = N, res, First = *this;
 		if (First.number[0] == 'F') //перевод числа в дополнительный код при надобности
 			First.Convert();
 		if (Second.number[0] == 'F') //перевод числа в дополнительный код при надобности
@@ -221,6 +221,8 @@ namespace Project3_1 {
 		return res;
 	}
 	Hex& Hex::Move_l(int a) {
+		if (a < 0)
+			throw std::exception("Invalid input");
 		if (a > (len - length)) {
 			Hex a;
 			*this = a;
@@ -237,14 +239,16 @@ namespace Project3_1 {
 		return *this;
 	}
 	Hex& Hex::Move_r(int a) {
+		if (a < 0)
+			throw std::exception("Invalid input");
 		if (a >= length) {
 			Hex a;
 			*this = a;
 			return *this;
 		}
+		int stop = len - length;
 		if (a == 0)
 			return *this;
-		int stop = len - length;
 		for (int i = len - 1; i >= stop; i--) {
 			if ((i + a) < len)
 				this->number[i + a] = this->number[i];//перемещение цифр на новое место, если это возможно
