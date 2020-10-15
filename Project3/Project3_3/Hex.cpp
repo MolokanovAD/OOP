@@ -199,6 +199,7 @@ namespace Project3_3 {
 			delete[] buf;
 		}
 		if (!res.length) {
+			res.~Hex();
 			Hex a(0);
 			res = a;
 		}
