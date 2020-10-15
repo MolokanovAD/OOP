@@ -12,6 +12,8 @@ namespace Project3_3 {
 		Hex(char*);
 		Hex(const int);
 		Hex(const Hex&);
+		Hex(Hex &&);
+		~Hex();
 		Hex& setN(char*);
 		void Formate(int);
 		char getSign() const{ return number[0]; }
@@ -29,6 +31,8 @@ namespace Project3_3 {
 	char upper(const char);
 	char HexToChar(int);
 	int CharToHex(char);
+
+	Hex f(const Hex&);
+	void dialog(Hex&, Hex&);
 }
 #endif
-
