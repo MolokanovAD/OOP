@@ -26,5 +26,7 @@ namespace Project3_2 {
 	char upper(const char);
 	char HexToChar(int);
 	int CharToHex(char);
+
+	void dialog(Hex&, Hex&);
 }
 #endif
