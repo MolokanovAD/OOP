@@ -1,5 +1,6 @@
-include <iostream>
+#include <iostream>
 #include "Hex.h"
+
 
 int main() {
 	Project3_3::Hex a, b;
@@ -39,62 +40,7 @@ int main() {
 		catch (std::exception & b) {
 			std::cout << b.what() << std::endl;
 		}
-		int k = 0;
-		while (k != 5) {
-			std::cout << "1) Move first operand to the right" << std::endl << "2) Move first operand to the left" << std::endl << "3) Compare operands" << std::endl << "4) Check parity of first operand" << std::endl << "5) Exit" << std::endl;
-			try {
-				std::cin >> k;
-			}
-			catch (std::exception & b) {
-				std::cout << b.what() << std::endl;
-			}
-			switch (k) {
-			case 1:
-				int r;
-				std::cout << "Enter number of digits" << std::endl;
-				try {
-					std::cin >> r;
-				}
-				catch (std::exception & b) {
-					std::cout << b.what() << std::endl;
-					continue;
-				}
-				a >>= r;
-				if(r < 0)
-					std::cout << "Incorrect input" << std::endl;
-				else
-					std::cout << a << std::endl;
-				break;
-			case 2:
-				std::cout << "Enter number of digits" << std::endl;
-				try {
-					std::cin >> r;
-				}
-				catch (std::exception & b) {
-					std::cout << b.what() << std::endl;
-					continue;
-				}
-				a <<= r;
-				if (r < 0)
-					std::cout << "Incorrect input" << std::endl;
-				else
-					std::cout << a << std::endl;
-				break;
-			case 3:
-				std::cout << a << " " << a.Compare(b) << " " << b << std::endl;
-				break;
-			case 4:
-				if (a.Check())
-					std::cout << a << " is an even number" << std::endl;
-				else
-					std::cout << a << " isn't an even number" << std::endl;
-				break;
-			case 5:
-				continue;
-			default:
-				std::cout << "You are wrong, repeat please" << std::endl;
-			}
-		}
+		dialog(a, b);
 		std::cout << "Press 0 if you want to exit or any other number" << std::endl;
 		std::cin >> flag;
 		scanf_s("%*c");
