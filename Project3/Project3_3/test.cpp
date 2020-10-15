@@ -10,19 +10,22 @@ TEST(HexConstructor, Constructors) {
     ASSERT_EQ('0', a.getSign());
     ASSERT_ANY_THROW(Project3_3::Hex b(aa));
     Project3_3::Hex c(bb);
+    Project3_3::Hex copy(c);
     ASSERT_EQ('0', c.getSign());
     Project3_3::Hex d(-0x846fed),m(d);
     ASSERT_EQ('=', m.Compare(d));
     ASSERT_EQ('F', d.getSign());
+    Project3_3::Hex dd(f(d));
+    ASSERT_EQ('=', dd.Compare(d));
 }
 TEST(HexMethods, ParityCheck) {
     Project3_3::Hex a(0x5624fe), b(-0xdfabef), c;
-    ASSERT_EQ(1, a.Check());
-    ASSERT_EQ(0, b.Check());
-    ASSERT_EQ(1, c.Check());
+    ASSERT_EQ(0, a.Check());
+    ASSERT_EQ(1, b.Check());
+    ASSERT_EQ(0, c.Check());
 }
 TEST(HexMethods, Compare) {
-    char n1[5] = { '0','x','5','f','\0' }, n2[3] = { '5','F', '\0' };
+    char n1[5] = { '0','5','f','\0' }, n2[3] = { '5','F', '\0' };
     Project3_3::Hex a(0x5624f), b(-0xdfabe), c(n1), d(n2);
     ASSERT_EQ('>', a.Compare(b));
     ASSERT_EQ('>', a.Compare(c));
