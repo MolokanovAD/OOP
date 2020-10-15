@@ -54,6 +54,8 @@ namespace Project3_2 {
 		default:
 			number[0] = '0';
 		}
+		if (a[i] == '0' && a[i+1] == 'x')//проверка ввода числа, начинающегося с 0x
+			i += 2;
 		while (a[i] == '0')//проверка ввода числа, начинающегося с 0
 			i += 1;
 		int ll = len - leng + i;//место, с которого начинаем вводить число в массив
@@ -148,6 +150,8 @@ namespace Project3_2 {
 		while (res.number[k] == '0') //вычисление длины результата
 			k++;
 		res.length = len - k;
+		if (!res.length)
+			res.length = 1;
 		return res;
 	}
 	const Hex Hex::operator -(const Hex& N) {
