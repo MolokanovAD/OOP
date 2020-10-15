@@ -1,4 +1,4 @@
-nclude "Hex.h"
+#include "Hex.h"
 #include <iostream>
 #include <stdio.h>
 
@@ -22,14 +22,13 @@ namespace Project3_3 {
 		char sign = '0';
 		if (a < 0) {
 			sign = 'F';
-			a *= -1;
+			a = -a;
 			b = a;
 		}
 		for (; b; size++)
 			b >>= 4;
 		number = new char[size+1];
-		int i = 0;
-		i = size;
+		int i = size;
 		number[0] = sign;
 		for (; a; i--) {
 			number[i] = HexToChar(a % 0x10);
@@ -37,18 +36,28 @@ namespace Project3_3 {
 		}
 		length = size;
 		if (!length) {
+			char* a = number;
 			length = 1;
 			number = new char[2];
 			number[0] = '0';
 			number[1] = '0';
+			delete a;
 		}
 	}
 	Hex::Hex(const Hex& A) {
-		/*length = A.length;
+		length = A.length;
 		number = new char[length + 1];
 		for (int i = 0; i <= length; i++)
-			number[i] = A.number[i];*/
-		*this = A;
+			number[i] = A.number[i];
+		//*this = A;
+	}
+	Hex::Hex(Hex&& A) :length(A.length), number(A.number) {
+		A.number = nullptr;
+		A.~Hex();
+	}
+	Hex::~Hex() {
+		length = 0;
+		delete[] number;
 	}
 	void Hex::Formate(int k) {
 		int new_size = length + k+1;
@@ -76,11 +85,11 @@ namespace Project3_3 {
 		default:
 			sign = '0';
 		}
-		if (a[i] == '0' && a[i + 1] == 'x')//проверка ввода числа, начинающегося с 0х
+		if (a[i] == '0' && a[i + 1] == 'x')
 			i += 2;
+		while (a[i] == '0')//проверка ввода числа, начинающегося с 0
+			i += 1;
 		int size = leng - i + 1;
-		/*if(size > 32)
-			size = 32;*/
 		try {
 			number = new char[size];
 		}
@@ -89,15 +98,214 @@ namespace Project3_3 {
 		}
 		number[0] = sign;
 		int ll = 1;
-		//length = ((leng - i) > 31) ? 31 : leng - i;
 		length = size - 1;
-		for (; i < leng/* && ll < size*/; i++, ll++) {
+		for (; i < leng; i++, ll++) {
 			a[i] = upper(a[i]); //проверка регистра
 			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//проверка попадания символа в диапазон шестнадцатиричных цифр
 				throw std::exception("Invalid symbol");
 			number[ll] = a[i];
 		}
+		if ((number[0] == 'F' && length == 1 && number[len - 1] == '0') || !length) {
+			Hex c;
+			*this = c;
+		}
 		return *this;
+	}
+	int Hex::Check()const { //проверка четности
+		return CharToHex(number[length]) & 1;
+	}
+	char Hex::Compare(const Hex& N) {
+		Hex S(N),F(*this);
+		if (number[0] < S.number[0]) //сначала проверка на разные знаки
+			return '>';
+		if (number[0] > S.number[0])
+			return '<';
+		int l = length, flag = 0;
+		if (S.length > length) {
+			l = S.length;
+			F.Formate(l - length);
+		}
+		else
+			S.Formate(length - S.length);
+		char sign = F.getSign();
+		for (int i = 1; i <= l; i++) { //выявляем модуль какого числа больше
+			if (F.number[i] > S.number[i]) {
+				if (sign == '0') //если число положительное, то больше то, модуль которого больше
+					return '>';
+				else
+					return '<';
+			}
+			if (S.number[i] > F.number[i]) {
+				if (sign == '0') //если число положительное, то больше то, модуль которого больше
+					return '<';
+				else
+					return '>';
+			}	
+		}
+		return '=';
+	}
+	Hex& Hex::Convert() {
+		for (int i = 1; i <= length; i++) { //инверитруем все разряды кроме знакового
+			int n = 0xF - CharToHex(number[i]);
+			number[i] = HexToChar(n);
+		}
+		int l = length;
+		while (l > 0 && number[l] == 'F') // поиск места для добавления единицы
+			l--;
+		if (l == 0) // если места нет произошло переполнение
+			throw std::exception("Incorrect operand");
+		int k = CharToHex(number[l]) + 1;
+		number[l] = HexToChar(k); //добавляем единицу в найденное место
+		for (int i = l + 1; i <= length; i++)
+			number[i] = '0';
+		return *this;
+	}
+	const Hex Hex::operator +(const Hex& N) {
+		Hex F(*this), Second(N);
+		int l = length + 1, flag = 0;
+		if (Second.length > length) {
+			l = Second.length + 1;
+		}
+		F.Formate(l - F.length);
+		Second.Formate(l - Second.length);
+		Hex res(F);
+		if (F.number[0] == 'F') //перевод чисел в дополнительный код при надобности
+			F.Convert();
+		if (Second.number[0] == 'F')
+			Second.Convert();
+		int transfer = 0;// transfer - перенос из младшего разряда
+		res.number = new char[l + 1];
+		for (int i = F.length; i > -1; i--) { //сложение чисел
+			int sum = CharToHex(F.number[i]) + CharToHex(Second.number[i]) + transfer;
+			res.number[i] = HexToChar((sum) % 0x10);
+			transfer = 0;
+			if (sum >>= 4)
+				transfer = 1;
+		}
+		/*if (F.number[0] == Second.number[0] && Second.number[0] != res.number[0])
+			throw std::exception("Overload"); //если знаки исходных чисел равны, а знак результата от них отличается - произошло переполнение*/
+		if (res.number[0] == 'F')
+			res.Convert();
+		int k = 1;
+		while (res.number[k] == '0') //вычисление длины результата
+			k++;
+		res.length = l + 1 - k;
+		if (k != 1) {
+			char* buf = res.number;
+			res.number = new char[res.length + 1];
+			res.number[0] = buf[0];
+			for (int i = 1; i <= res.length; i++)
+				res.number[i] = buf[k + i - 1];
+			delete[] buf;
+		}
+		if (!res.length) {
+			Hex a(0);
+			res = a;
+		}
+		return res;
+	}
+	const Hex Hex::operator -(const Hex& N) {
+		Hex second = N, res;
+		if (second.number[0] == '0') //домножаем второй операнд на -1
+			second.number[0] = 'F';
+		else
+			second.number[0] = '0';
+		res = *this + second;
+		return res;
+	}
+	Hex& Hex::operator <<=(int a) {
+		if (a < 0)
+			throw std::exception("Invalid input");
+		if (a == 0)
+			return *this;
+		if (number[0] == '0' && number[1] == '0' && length == 1) {
+			Hex a;
+			*this = a;
+			return *this;
+		}
+		int l = length;
+		length += a;
+		char* buf = number;
+		try {
+			number = new char[length + 1];
+		}
+		catch (std::exception & a) {
+			throw std::exception("Memory allocation error");
+		}
+		int i = 0;
+		for (; i <= l; i++)
+			number[i] = buf[i];
+		for (; i <= length; i++)
+			number[i] = '0';
+		return *this;
+	}
+	Hex& Hex::operator >>=(int a) {
+		if (a < 0)
+			throw std::exception("Invalid input");
+		if (a == 0)
+			return *this;
+		if (a >= length) {
+			Hex a(0);
+			*this = a;
+			return *this;
+		}
+		length -= a;
+		char* buf = number;
+		try {
+			number = new char[length + 1];
+		}
+		catch (std::exception & a) {
+			throw std::exception("Memory allocation error");
+		}
+		for (int i = 0; i <= length; i++)
+			number[i] = buf[i];
+		return *this;
+	}
+	Hex& Hex::operator =(const Hex& A) {
+		length = A.length;
+		number = new char[length + 1];
+		for (int i = 0; i <= length; i++)
+			number[i] = A.number[i];
+		return *this;
+	}
+	std::istream& operator >>(std::istream& c, Hex& El) {
+		char* s = (char*)malloc(1), buf[35];
+		int n = 0, l = 0;
+		s[0] = '\0';
+		do {
+			n = scanf_s("%34[^\n]", buf, 35);
+			if (n < 0)
+			{
+				free(s);
+			}
+			if (n > 0) {
+				l += strlen(buf);
+				try {
+					s = (char*)realloc(s, l + 1);
+				}
+				catch (std::exception & a) {
+					c.setstate(std::ios::failbit);
+					return c;
+				}
+				strcat_s(s, l + 1, buf);
+			}
+			else
+				scanf_s("%*c");
+		} while (n > 0);
+		try {
+			El.setN(s);
+		}
+		catch (std::exception & a) {
+			c.setstate(std::ios::failbit);
+		}
+		return c;
+	}
+	std::ostream& operator <<(std::ostream& c, const Hex& El) {
+		if (El.number[0] == 'F')
+			c << "-";
+		for (int j = 1; j <= El.length; j++)
+			c << El.number[j];
+		return c;
 	}
 	char upper(const char a) {
 		switch (a) {
@@ -152,187 +360,78 @@ namespace Project3_3 {
 		}
 		return -1;
 	}
-	int Hex::Check() const { //проверка четности
-		if (CharToHex(number[length]) & 1)
-			return 0;
-		return 1;
-	}
-	char Hex::Compare(const Hex& N) {
-		Hex S(N),F(*this);
-		if (number[0] < N.number[0]) //сначала проверка на разные знаки
-			return '>';
-		if (number[0] > N.number[0])
-			return '<';
-		int l = length, flag = 0;
-		if (S.length > length) {
-			l = S.length;
-			F.Formate(l - length);
-		}
-		else
-			S.Formate(length - S.length);
-		for (int i = 1; i <= l; i++) { //выявляем модуль какого числа больше
-			if (F.number[i] > S.number[i]) {
-				i = l + 1;
-				flag = 1;
-				continue;
+	void dialog(Hex& a, Hex& b) {
+		int k = 0;
+		while (k != 5) {
+			std::cout << "1) Move first operand to the right" << std::endl << "2) Move first operand to the left" << std::endl << "3) Compare operands" << std::endl << "4) Check parity of first operand" << std::endl << "5) Exit" << std::endl;
+			try {
+				std::cin >> k;
 			}
-			if (S.number[i] > F.number[i])
-				i = l+1, flag = -1;
-		}
-		char sign = F.getSign();
-		if (sign == '0') { //если число положительное, то больше то, модуль которого больше
-			if (flag == 1)
-				return '>';
-			if (flag == -1)
-				return '<';
-		}
-		if (flag == 1)//если число отрицательное, то больше то, модуль которого меньше
-			return '<';
-		if (flag == -1)
-			return '>';
-		return '=';
-	}
-	Hex& Hex::Convert() {
-		for (int i = 1; i <= length; i++) { //инверитруем все разряды кроме знакового
-			int n = 0xF - CharToHex(number[i]);
-			number[i] = HexToChar(n);
-		}
-		int l = length;
-		while (l > 0 && number[l] == 'F') // поиск места для добавления единицы
-			l--;
-		if (l == 0) // если места нет произошло переполнение
-			throw std::exception("Incorrect operand");
-		int k = CharToHex(number[l]) + 1;
-		number[l] = HexToChar(k); //добавляем единицу в найденное место
-		for (int i = l + 1; i <= length; i++)
-			number[i] = '0';
-		return *this;
-	}
-	const Hex Hex::operator +(const Hex& N) {
-		Hex F(*this), Second(N);
-		int l = length + 1, flag = 0;
-		if (Second.length > length) {
-			l = Second.length + 1;
-		}
-		F.Formate(l - F.length);
-		Second.Formate(l - Second.length);
-		Hex res(F);
-		if (F.number[0] == 'F') //перевод чисел в дополнительный код при надобности
-			F.Convert();
-		if (Second.number[0] == 'F')
-			Second.Convert();
-		int transfer = 0;// transfer - перенос из младшего разряда
-		res.number = new char[l + 1];
-		for (int i = F.length; i > -1; i--) { //сложение чисел
-			int sum = CharToHex(F.number[i]) + CharToHex(Second.number[i]) + transfer;
-			res.number[i] = HexToChar((sum) % 0x10);
-			transfer = 0;
-			if (sum >>= 4)
-				transfer = 1;
-		}
-		/*if (F.number[0] == Second.number[0] && Second.number[0] != res.number[0])
-			throw std::exception("Overload"); //если знаки исходных чисел равны, а знак результата от них отличается - произошло переполнение*/
-		if (res.number[0] == 'F')
-			res.Convert();
-		int k = 1;
-		while (res.number[k] == '0') //вычисление длины результата
-			k++;
-		res.length = l + 1 - k;
-		char* buf = res.number;
-		res.number = new char[res.length + 1];
-		res.number[0] = buf[0];
-		for (int i = 1; i <= res.length; i++)
-			res.number[i] = buf[k + i - 1];
-		if (!res.length) {
-			Hex a(0);
-			res = a;
-		}
-		delete[] buf;
-		return res;
-	}
-	const Hex Hex::operator -(const Hex& N) {
-		Hex second = N, res;
-		if (second.number[0] == '0') //домножаем второй операнд на -1
-			second.number[0] = 'F';
-		else
-			second.number[0] = '0';
-		res = *this + second;
-		return res;
-	}
-	Hex& Hex::operator <<=(int a) {
-		if (a < 0)
-			return *this;
-		int l = length;
-		length += a;
-		char* buf = number;
-		number = new char[length+1];
-		int i = 0;
-		for (; i <= l; i++)
-			number[i] = buf[i];
-		for (; i <= length; i++)
-			number[i] = '0';
-		return *this;
-	}
-	Hex& Hex::operator >>=(int a) {
-		if (a < 0)
-			return *this;
-		if (a >= length) {
-			Hex a(0);
-			*this = a;
-			return *this;
-		}
-		length -= a;
-		char* buf = number;
-		number = new char[length + 1];
-		for (int i = 0; i <= length; i++)
-			number[i] = buf[i];
-		return *this;
-	}
-	Hex& Hex::operator =(const Hex& A) {
-		length = A.length;
-		number = new char[length + 1];
-		for (int i = 0; i <= length; i++)
-			number[i] = A.number[i];
-		return *this;
-	}
-	std::istream& operator >>(std::istream& c, Hex& El) {
-		char* s = (char*)malloc(1), buf[35];
-		int n = 0, l = 0;
-		s[0] = '\0';
-		do {
-			n = scanf_s("%34[^\n]", buf, 35);
-			if (n < 0)
-			{
-				free(s);
+			catch (std::exception & b) {
+				std::cout << b.what() << std::endl;
 			}
-			if (n > 0) {
-				l += strlen(buf);
+			switch (k) {
+			case 1:
+				int r;
+				std::cout << "Enter number of digits" << std::endl;
 				try {
-					s = (char*)realloc(s, l + 1);
+					std::cin >> r;
 				}
-				catch (std::exception & a) {
-					c.setstate(std::ios::failbit);
-					return c;
+				catch (std::exception & b) {
+					std::cout << b.what() << std::endl;
+					continue;
 				}
-				strcat_s(s, l + 1, buf);
+				try {
+					a >>= r;
+				}
+				catch (std::exception & b) {
+					std::cout << b.what() << std::endl;
+					continue;
+				}
+				/*if (r < 0)
+					std::cout << "Incorrect input" << std::endl;
+				else*/
+					std::cout << a << std::endl;
+				break;
+			case 2:
+				std::cout << "Enter number of digits" << std::endl;
+				try {
+					std::cin >> r;
+				}
+				catch (std::exception & b) {
+					std::cout << b.what() << std::endl;
+					continue;
+				}
+				try {
+					a <<= r;
+				}
+				catch (std::exception & b) {
+					std::cout << b.what() << std::endl;
+					continue;
+				}
+				/*if (r < 0)
+					std::cout << "Incorrect input" << std::endl;
+				else*/
+					std::cout << a << std::endl;
+				break;
+			case 3:
+				std::cout << a << " " << a.Compare(b) << " " << b << std::endl;
+				break;
+			case 4:
+				if (!a.Check())
+					std::cout << a << " is an even number" << std::endl;
+				else
+					std::cout << a << " isn't an even number" << std::endl;
+				break;
+			case 5:
+				continue;
+			default:
+				std::cout << "You are wrong, repeat please" << std::endl;
 			}
-			else
-				scanf_s("%*c");
-		} while (n > 0);
-		try {
-			El.setN(s);
 		}
-		catch (std::exception & a) {
-			c.setstate(std::ios::failbit);
-		}
-		return c;
 	}
-	std::ostream& operator <<(std::ostream& c, const Hex& El) {
-		if (El.number[0] == 'F')
-			c << "-";
-		for (int j = 1; j <= El.length; j++)
-			c << El.number[j];
-		return c;
+	Hex f(const Hex& b) {
+		Hex a(b);
+		return a;
 	}
 }
-
