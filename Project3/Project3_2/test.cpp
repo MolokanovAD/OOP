@@ -15,12 +15,12 @@ TEST(HexConstructor, Constructors) {
 }
 TEST(HexMethods, ParityCheck) {
     Project3_2::Hex a(0x5624fe),b(-0xdfabef),c;
-    ASSERT_EQ(1, a.Check());
-    ASSERT_EQ(0, b.Check());
-    ASSERT_EQ(1, c.Check());
+    ASSERT_EQ(0, a.Check());
+    ASSERT_EQ(1, b.Check());
+    ASSERT_EQ(0, c.Check());
 }
 TEST(HexMethods, Compare) {
-    char n1[5] = { '0','x','5','f','\0' }, n2[3] = { '5','F', '\0' };
+    char n1[5] = { '0','5','f','\0' }, n2[3] = { '5','F', '\0' };
     Project3_2::Hex a(0x5624f), b(-0xdfabe), c(n1),d(n2);
     ASSERT_EQ('>', a.Compare(b));
     ASSERT_EQ('>', a.Compare(c));
