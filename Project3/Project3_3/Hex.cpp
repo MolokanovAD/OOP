@@ -162,6 +162,8 @@ namespace Project3_3 {
 	}
 	const Hex Hex::operator +(const Hex& N) {
 		Hex F(*this), Second(N);
+		if (Second.length == 1 && Second.number[1] == '0')//если второй операнд 0 возвращаем первый операнд
+			return F;
 		int l = length + 1, flag = 0;
 		if (Second.length > length) {
 			l = Second.length + 1;
