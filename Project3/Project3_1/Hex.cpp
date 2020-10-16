@@ -121,6 +121,8 @@ namespace Project3_1 {
 	}
 	const Hex Hex::Add(const Hex& N) {
 		Hex Second = N, res, First = *this;
+		if (Second.length == 1 && Second.number[1] == '0')//если второй операнд 0 возвращаем первый операнд
+			return F;
 		if (First.number[0] == 'F') //перевод числа в дополнительный код при надобности
 			First.Convert();
 		if (Second.number[0] == 'F') //перевод числа в дополнительный код при надобности
