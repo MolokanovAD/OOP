@@ -9,23 +9,24 @@ TEST(HexConstructor, Constructors) {
     char aa[8] = { 'a', 'a', 'a', '.', 'a', 'a', 'a', '\0' };
     char bb[36] = { 'a', 'a', 'a', 'a', 'a', 'a', 'a','a','a', 'a', 'a', 'a', 'a', 'a', 'a','a', 'a', 'a', 'a', 'a', 'a', 'a', 'a','a', 'a', 'a', 'a', 'a', 'a', 'a', 'a','a','a', 'a', 'a','\0', };
     ASSERT_EQ('0', a.getSign());
-    ASSERT_ANY_THROW(H16_3::Hex b(aa));
-    H16_3::Hex c(bb);
-    H16_3::Hex copy(c);
+    ASSERT_ANY_THROW(H16_3::Hex b(aa));//с помощью строки
+    H16_3::Hex move_c(f(a)); //перемещающий
+    H16_3::Hex c(bb);//с помощью строки
+    H16_3::Hex copy(c);//копирующий
     ASSERT_EQ('0', c.getSign());
-    H16_3::Hex d(-0x846fed), m(d);
+    H16_3::Hex d(-0x846fed), m(d); //с помощью константы
     ASSERT_EQ(0, m.Compare(d));
     ASSERT_EQ('F', d.getSign());
     H16_3::Hex dd(f(d));
     ASSERT_EQ(0, dd.Compare(d));
 }
-TEST(HexMethods, ParityCheck) {
+TEST(HexMethods, ParityCheck) { //проверка четности
     H16_3::Hex a(0x5624fe), b(-0xdfabef), c;
     ASSERT_EQ(0, a.Check());
     ASSERT_EQ(1, b.Check());
     ASSERT_EQ(0, c.Check());
 }
-TEST(HexMethods, Compare) {
+TEST(HexMethods, Compare) { //сравнение
     char n1[5] = { '0','5','f','\0' }, n2[3] = { '5','F', '\0' };
     H16_3::Hex a(0x5624f), b(-0xdfabe), c(n1), d(n2);
     ASSERT_EQ(1, a.Compare(b));
@@ -33,7 +34,7 @@ TEST(HexMethods, Compare) {
     ASSERT_EQ(-1, b.Compare(c));
     ASSERT_EQ(0, c.Compare(d));
 }
-TEST(HexMethods, Convert) {
+TEST(HexMethods, Convert) { //перевод в доп. код
     H16_3::Hex d(-0x846fed);
     H16_3::Hex c = d.Convert().Convert();
     ASSERT_EQ(0, c.Compare(d));
@@ -57,7 +58,7 @@ TEST(HexMethods, Minus) {
     H16_3::Hex e(bb), f(2), t(-0xfedabc), g(bc);
     ASSERT_EQ(0, g.Compare(e - t));
 }
-TEST(HexMethods, Move) {
+TEST(HexMethods, Move) { //сдвиги
     H16_3::Hex a(0x5624f), b(0x56), c, d(0x5600000),k(500);
     ASSERT_ANY_THROW(k >>= -1);
     ASSERT_ANY_THROW(k <<= -1);
@@ -70,12 +71,12 @@ TEST(HexMethods, Move) {
     b <<= 35;
     ASSERT_EQ(1, b.Compare(c));
 }
-TEST(HexMethods, Assignment) {
+TEST(HexMethods, Assignment) { // равенства
     H16_3::Hex a(0x5624f), b(0x56), c, d(0x5600000);
     H16_3::Hex move_c(f(a)),move_a;
-    move_a = FF(b);
+    move_a = FF(b); //перемещающее равенство
     H16_3::Hex copy_a;
-    copy_a = move_a;
+    copy_a = move_a; // копирующее равенство
     ASSERT_EQ(0, a.Compare(move_c));
     ASSERT_EQ(0, move_a.Compare(b));
     ASSERT_EQ(0, move_a.Compare(copy_a));
