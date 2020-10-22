@@ -34,4 +34,3 @@ namespace H16_3 {
 	int CharToHex(char);
 }
 #endif
-
