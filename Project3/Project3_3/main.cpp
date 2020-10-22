@@ -6,20 +6,20 @@
 int main() {
 	H16_3::Hex a, b,m;
 	m = FF(a);
-	int flag = 1;
-	while (flag) {
+	bool flag = false;
+	while (!flag) {
 		std::cout << "Enter first hexadecimal value" << std::endl;
 		std::cin >> a;
 		if (!std::cin.good()) {
 			std::cout << "Wrong data" << std::endl;
-			flag = 0;
+			flag = true;
 			continue;
 		}
 		std::cout << "Enter second hexadecimal value" << std::endl;
 		std::cin >> b;
 		if (!std::cin.good()) {
 			std::cout << "Wrong data" << std::endl;
-			flag = 0;
+			flag = true;
 			continue;
 		}
 		try {
@@ -44,7 +44,7 @@ int main() {
 			std::cout << b.what() << std::endl;
 		}
 		dialog(a, b);
-		std::cout << "Press 0 if you want to exit or any other number" << std::endl;
+		std::cout << "Press 0 to enter new numbers and any other button to exit" << std::endl;
 		std::cin >> flag;
 		scanf_s("%*c");
 	}
