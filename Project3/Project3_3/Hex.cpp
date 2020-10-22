@@ -3,13 +3,13 @@
 #include <stdio.h>
 
 namespace H16_3 {
-	Hex::Hex() { //Пустой конструктор
+	Hex::Hex() { //РџСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
 		length = 1;
 		number = new char[2];
 		number[0] = '0';
 		number[1] = '0';
 	}
-	Hex::Hex(char* a) {//Инициализирующий конструктор для инициализации строкой
+	Hex::Hex(char* a) {//РРЅРёС†РёР°Р»РёР·РёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃС‚СЂРѕРєРѕР№
 		try {
 			pushN(a);
 		}
@@ -17,7 +17,7 @@ namespace H16_3 {
 			throw std::exception("Wrong data");
 		}
 	}
-	Hex::Hex(const int A) { //Инициализирующий конструктор для инициализации константой
+	Hex::Hex(const int A) { //РРЅРёС†РёР°Р»РёР·РёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё РєРѕРЅСЃС‚Р°РЅС‚РѕР№
 		int a = A,b = A,size = 0;
 		char sign = '0';
 		if (a < 0) {
@@ -49,10 +49,10 @@ namespace H16_3 {
 		number = new char[length + 1];
 		for (int i = 0; i <= length; i++)
 			number[i] = A.number[i];
-		std::cout << "Copy constructor works" << std::endl;
+		//std::cout << "Copy constructor works" << std::endl;
 	}
 	Hex::Hex(Hex&& A) :length(A.length), number(A.number) {
-		std::cout << "Moving constructor works" << std::endl;
+		//std::cout << "Moving constructor works" << std::endl;
 		A.number = nullptr;
 	}
 	Hex::~Hex() {
@@ -73,7 +73,7 @@ namespace H16_3 {
 	void Hex::pushN(char* a) {
 		int leng = strlen(a), i = 0;
 		char sign = '0';
-		switch (a[0]) {//Проверка знака
+		switch (a[0]) {//РџСЂРѕРІРµСЂРєР° Р·РЅР°РєР°
 		case '+':
 			i++;
 			break;
@@ -86,7 +86,7 @@ namespace H16_3 {
 		}
 		if (a[i] == '0' && a[i + 1] == 'x')
 			i += 2;
-		while (a[i] == '0')//проверка ввода числа, начинающегося с 0
+		while (a[i] == '0')//РїСЂРѕРІРµСЂРєР° РІРІРѕРґР° С‡РёСЃР»Р°, РЅР°С‡РёРЅР°СЋС‰РµРіРѕСЃСЏ СЃ 0
 			i += 1;
 		int size = leng - i + 1;
 		try {
@@ -99,8 +99,8 @@ namespace H16_3 {
 		int ll = 1;
 		length = size - 1;
 		for (; i < leng; i++, ll++) {
-			a[i] = upper(a[i]); //проверка регистра
-			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//проверка попадания символа в диапазон шестнадцатиричных цифр
+			a[i] = upper(a[i]); //РїСЂРѕРІРµСЂРєР° СЂРµРіРёСЃС‚СЂР°
+			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//РїСЂРѕРІРµСЂРєР° РїРѕРїР°РґР°РЅРёСЏ СЃРёРјРІРѕР»Р° РІ РґРёР°РїР°Р·РѕРЅ С€РµСЃС‚РЅР°РґС†Р°С‚РёСЂРёС‡РЅС‹С… С†РёС„СЂ
 				throw std::exception("Invalid symbol");
 			number[ll] = a[i];
 		}
@@ -109,12 +109,12 @@ namespace H16_3 {
 			*this = c;
 		}
 	}
-	unsigned char Hex::Check()const { //проверка четности
+	unsigned char Hex::Check()const { //РїСЂРѕРІРµСЂРєР° С‡РµС‚РЅРѕСЃС‚Рё
 		return CharToHex(number[length]) & 1;
 	}
 	char Hex::Compare(const Hex& N) {
 		Hex S(N),F(*this);
-		if (number[0] < S.number[0]) //сначала проверка на разные знаки
+		if (number[0] < S.number[0]) //СЃРЅР°С‡Р°Р»Р° РїСЂРѕРІРµСЂРєР° РЅР° СЂР°Р·РЅС‹Рµ Р·РЅР°РєРё
 			return 1;
 		if (number[0] > S.number[0])
 			return -1;
@@ -126,41 +126,41 @@ namespace H16_3 {
 		else
 			S.Formate(length - S.length);
 		char sign = F.getSign();
-		for (int i = 1; i <= l; i++) { //выявляем модуль какого числа больше
+		for (int i = 1; i <= l; i++) { //РІС‹СЏРІР»СЏРµРј РјРѕРґСѓР»СЊ РєР°РєРѕРіРѕ С‡РёСЃР»Р° Р±РѕР»СЊС€Рµ
 			if (F.number[i] > S.number[i]) {
-				if (sign == '0') //если число положительное, то больше то, модуль которого больше
+				if (sign == '0') //РµСЃР»Рё С‡РёСЃР»Рѕ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ, С‚Рѕ Р±РѕР»СЊС€Рµ С‚Рѕ, РјРѕРґСѓР»СЊ РєРѕС‚РѕСЂРѕРіРѕ Р±РѕР»СЊС€Рµ
 					return 1;
 				else
-					return -1; //если число отрицательное, то больше то, модуль которого меньше
+					return -1; //РµСЃР»Рё С‡РёСЃР»Рѕ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ, С‚Рѕ Р±РѕР»СЊС€Рµ С‚Рѕ, РјРѕРґСѓР»СЊ РєРѕС‚РѕСЂРѕРіРѕ РјРµРЅСЊС€Рµ
 			}
 			if (S.number[i] > F.number[i]) {
-				if (sign == '0') //если число положительное, то больше то, модуль которого больше
+				if (sign == '0') //РµСЃР»Рё С‡РёСЃР»Рѕ РїРѕР»РѕР¶РёС‚РµР»СЊРЅРѕРµ, С‚Рѕ Р±РѕР»СЊС€Рµ С‚Рѕ, РјРѕРґСѓР»СЊ РєРѕС‚РѕСЂРѕРіРѕ Р±РѕР»СЊС€Рµ
 					return -1;
 				else
-					return 1; //если число отрицательное, то больше то, модуль которого меньше
+					return 1; //РµСЃР»Рё С‡РёСЃР»Рѕ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅРѕРµ, С‚Рѕ Р±РѕР»СЊС€Рµ С‚Рѕ, РјРѕРґСѓР»СЊ РєРѕС‚РѕСЂРѕРіРѕ РјРµРЅСЊС€Рµ
 			}	
 		}
 		return 0;
 	}
 	Hex& Hex::Convert() {
-		for (int i = 1; i <= length; i++) { //инверитруем все разряды кроме знакового
+		for (int i = 1; i <= length; i++) { //РёРЅРІРµСЂРёС‚СЂСѓРµРј РІСЃРµ СЂР°Р·СЂСЏРґС‹ РєСЂРѕРјРµ Р·РЅР°РєРѕРІРѕРіРѕ
 			int n = 0xF - CharToHex(number[i]);
 			number[i] = HexToChar(n);
 		}
 		int l = length;
-		while (l > 0 && number[l] == 'F') // поиск места для добавления единицы
+		while (l > 0 && number[l] == 'F') // РїРѕРёСЃРє РјРµСЃС‚Р° РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ РµРґРёРЅРёС†С‹
 			l--;
-		if (l == 0) // если места нет произошло переполнение
+		if (l == 0) // РµСЃР»Рё РјРµСЃС‚Р° РЅРµС‚ РїСЂРѕРёР·РѕС€Р»Рѕ РїРµСЂРµРїРѕР»РЅРµРЅРёРµ
 			throw std::exception("Incorrect operand");
 		int k = CharToHex(number[l]) + 1;
-		number[l] = HexToChar(k); //добавляем единицу в найденное место
+		number[l] = HexToChar(k); //РґРѕР±Р°РІР»СЏРµРј РµРґРёРЅРёС†Сѓ РІ РЅР°Р№РґРµРЅРЅРѕРµ РјРµСЃС‚Рѕ
 		for (int i = l + 1; i <= length; i++)
 			number[i] = '0';
 		return *this;
 	}
 	Hex Hex::operator +(const Hex& N) {
 		Hex F(*this), Second(N);
-		if (Second.length == 1 && Second.number[1] == '0')//если второй операнд 0 возвращаем первый операнд
+		if (Second.length == 1 && Second.number[1] == '0')//РµСЃР»Рё РІС‚РѕСЂРѕР№ РѕРїРµСЂР°РЅРґ 0 РІРѕР·РІСЂР°С‰Р°РµРј РїРµСЂРІС‹Р№ РѕРїРµСЂР°РЅРґ
 			return F;
 		int l = length + 1, flag = 0;
 		if (Second.length > length) {
@@ -169,13 +169,13 @@ namespace H16_3 {
 		F.Formate(l - F.length);
 		Second.Formate(l - Second.length);
 		Hex res(F);
-		if (F.number[0] == 'F') //перевод чисел в дополнительный код при надобности
+		if (F.number[0] == 'F') //РїРµСЂРµРІРѕРґ С‡РёСЃРµР» РІ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅС‹Р№ РєРѕРґ РїСЂРё РЅР°РґРѕР±РЅРѕСЃС‚Рё
 			F.Convert();
 		if (Second.number[0] == 'F')
 			Second.Convert();
-		int transfer = 0;// transfer - перенос из младшего разряда
+		int transfer = 0;// transfer - РїРµСЂРµРЅРѕСЃ РёР· РјР»Р°РґС€РµРіРѕ СЂР°Р·СЂСЏРґР°
 		res.number = new char[l + 1];
-		for (int i = F.length; i > -1; i--) { //сложение чисел
+		for (int i = F.length; i > -1; i--) { //СЃР»РѕР¶РµРЅРёРµ С‡РёСЃРµР»
 			int sum = CharToHex(F.number[i]) + CharToHex(Second.number[i]) + transfer;
 			res.number[i] = HexToChar((sum) % 0x10);
 			transfer = 0;
@@ -185,7 +185,7 @@ namespace H16_3 {
 		if (res.number[0] == 'F')
 			res.Convert();
 		int k = 1;
-		while (res.number[k] == '0') //вычисление длины результата
+		while (res.number[k] == '0') //РІС‹С‡РёСЃР»РµРЅРёРµ РґР»РёРЅС‹ СЂРµР·СѓР»СЊС‚Р°С‚Р°
 			k++;
 		res.length = l + 1 - k;
 		if (k != 1) {
@@ -205,7 +205,7 @@ namespace H16_3 {
 	}
 	Hex Hex::operator -(const Hex& N) {
 		Hex second = N, res;
-		if (second.number[0] == '0') //домножаем второй операнд на -1
+		if (second.number[0] == '0') //РґРѕРјРЅРѕР¶Р°РµРј РІС‚РѕСЂРѕР№ РѕРїРµСЂР°РЅРґ РЅР° -1
 			second.number[0] = 'F';
 		else
 			second.number[0] = '0';
@@ -273,7 +273,7 @@ namespace H16_3 {
 		length = A.length;
 		number = A.number;
 		A.number = nullptr;
-		std::cout << "Moving = works" << std::endl;
+		//std::cout << "Moving = works" << std::endl;
 		return *this;
 	}
 	std::istream& operator >>(std::istream& c, Hex& El) {
