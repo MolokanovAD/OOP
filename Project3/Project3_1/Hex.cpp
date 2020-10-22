@@ -1,8 +1,8 @@
-#include "Hex.h"
+include "Hex.h"
 #include <iostream>
 #include <stdio.h>
 
-namespace Project3_1 {
+namespace H16_1 {
 	Hex::Hex() { //Пустой конструктор
 		length = 1;
 		for (int i = 0; i < len; i++)
@@ -36,7 +36,7 @@ namespace Project3_1 {
 		if (!length)
 			length = 1;
 	}
-	Hex& Hex::setN(char* a) {
+	void Hex::setN(char* a) {
 		int leng = strlen(a), i = 0;
 		if (!leng)
 			throw std::exception("Wrong data");
@@ -51,7 +51,7 @@ namespace Project3_1 {
 		default:
 			number[0] = '0';
 		}
-		if (a[i] == '0' && a[i + 1] == 'x')//проверка ввода числа, начинающегося с 0x
+		if (a[i] == '0' && a[i+1] == 'x')//проверка ввода числа, начинающегося с 0x
 			i += 2;
 		while(a[i] == '0')//проверка ввода числа, начинающегося с 0
 			i += 1;
@@ -73,16 +73,15 @@ namespace Project3_1 {
 			Hex c;
 			*this = c;
 		}
-		return *this;
 	}
 	int Hex::Check()const { //проверка четности
 		return CharToHex(number[31]) & 1;
 	}
-	char Hex::Compare(const Hex& N) {
+	char Hex::Compare(const Hex& N) const {
 		if (number[0] < N.number[0]) //сначала проверка на разные знаки
-			return '>';
+			return 1;
 		if (number[0] > N.number[0])
-			return '<';
+			return -1;
 		int l = length;
 		if (N.length > length)
 			l = N.length;
@@ -90,18 +89,18 @@ namespace Project3_1 {
 		for (int i = len - l; i < len; i++) { //выявляем модуль какого числа больше
 			if (number[i] > N.number[i]) {
 				if (sign == '0') //если число положительное, то больше то, модуль которого больше
-					return '>';
+					return 1;
 				else             //если число отрицательное, то больше то, модуль которого меньше
-					return '<';
+					return -1;
 			}
 			if (N.number[i] > number[i]) {
 				if (sign == '0') //если число положительное, то больше то, модуль которого больше
-					return '<';
+					return -1;
 				else             //если число отрицательное, то больше то, модуль которого меньше
-					return '>';
+					return 1;
 			}
 		}
-		return '=';
+		return 0;
 	}
 	Hex& Hex::Convert() {
 		for (int i = 1; i < len; i++) { //инверитруем все разряды
@@ -119,9 +118,9 @@ namespace Project3_1 {
 			number[i] = '0';
 		return *this;
 	}
-	const Hex Hex::Add(const Hex& N) {
+	Hex Hex::Add(const Hex& N) const {
 		Hex Second = N, res, First = *this;
-		if (Second.length == 1 && Second.number[1] == '0')//если второй операнд 0 возвращаем первый операнд
+		if (Second.length == 1 && Second.number[len - 1] == '0')//если второй операнд 0 возвращаем первый операнд
 			return First;
 		if (First.number[0] == 'F') //перевод числа в дополнительный код при надобности
 			First.Convert();
@@ -153,7 +152,7 @@ namespace Project3_1 {
 			res.length = 1;
 		return res;
 	}
-	const Hex Hex::Decrease(const Hex& N) {
+	Hex Hex::Decrease(const Hex& N) const {
 		Hex second = N, res;
 		if (second.number[0] == '0') //домножаем второй операнд на -1
 			second.number[0] = 'F';
@@ -202,6 +201,8 @@ namespace Project3_1 {
 		for (int i = 0; i < a; i++)
 			number[len - i - 1] = '0'; //дополнение нулями числа справа
 		length += a; // коррекция длины числа
+		for (int k = len - length; number[k] == '0'; k++)
+			length -= 1;
 		if (length > 31)
 			length = 31;
 		return *this;
@@ -293,95 +294,5 @@ namespace Project3_1 {
 		case 'F': return 0xf;
 		}
 		return -1;
-	}
-
-	void dialog(Hex& a,Hex& b) {
-		int k = 0;
-		while (k != 5) {
-			std::cout << "1) Move first operand to the right" << std::endl << "2) Move first operand to the left" << std::endl << "3) Compare operands" << std::endl << "4) Check parity of first operand" << std::endl << "5) Exit" << std::endl;
-			std::cin >> k;
-			if (!std::cin.good()) {
-				std::cout << "Invalid input" << std::endl;
-				k = 5;
-				continue;
-			}
-			switch (k) {
-			case 1:
-				int r;
-				std::cout << "Enter number of digits" << std::endl;
-				std::cin >> r;
-				if (!std::cin.good()) {
-					std::cout << "Invalid input" << std::endl;
-					k = 5;
-					continue;
-				}
-				try {
-					a.Move_r(r);
-				}
-				catch (std::exception & b) {
-					std::cout << b.what() << std::endl;
-					continue;
-				}
-				a.Print(std::cout);
-				std::cout << std::endl;
-				break;
-			case 2:
-				std::cout << "Enter number of digits" << std::endl;
-				std::cin >> r;
-				if (!std::cin.good()) {
-					std::cout << "Invalid input" << std::endl;
-					k = 5;
-					continue;
-				}
-				try {
-					a.Move_l(r);
-				}
-				catch (std::exception & b) {
-					std::cout << b.what() << std::endl;
-					continue;
-				}
-				a.Print(std::cout);
-				std::cout << std::endl;
-				break;
-			case 3:
-				a.Print(std::cout);
-				std::cout << " " << a.Compare(b) << " ";
-				b.Print(std::cout);
-				std::cout << std::endl;
-				break;
-			case 4:
-				if (!a.Check()) {
-					a.Print(std::cout);
-					std::cout << " is an even number" << std::endl;
-				}
-				else {
-					a.Print(std::cout);
-					std::cout << " isn't an even number" << std::endl;
-				}
-				break;
-			case 5:
-				continue;
-			default:
-				std::cout << "You are wrong, repeat please" << std::endl;
-			}
-		}
-	}
-	void out(Hex& a, Hex& b,Hex & c,const char* msg) {
-		if (b.getSign() == 'F') {
-			a.Print(std::cout);
-			std::cout << msg <<"(";
-			b.Print(std::cout);
-			std::cout << ") = ";
-			c.Print(std::cout);
-			std::cout << std::endl;
-		}
-		else {
-			a.Print(std::cout);
-			std::cout << msg;
-			b.Print(std::cout);
-			std::cout << " = ";
-			c.Print(std::cout);
-			std::cout << std::endl;
-		}
 	}
 }
