@@ -1,7 +1,7 @@
 #include <iostream>
 #include "f.h"
 
-char Interprete(int k) {
+char Interprete(int k) { // функция для трактовки результата сравнения
 	switch (k) {
 	case -1:
 		return '<';
