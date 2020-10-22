@@ -1,22 +1,22 @@
 #ifndef HEX_H
 #define HEX_H
 #include <iostream>
-const int len = 32;
-namespace Project3_2 {
+#define len 32
+namespace H16_2 {
 	class Hex {
 	private:
 		unsigned char length;
 		char number[len];
+		void pushN(char*);
 	public:
 		Hex();
 		Hex(char*);
 		Hex(const int);
-		Hex& setN(char*);
 		char getSign() const{ return number[0]; }
 		int Check() const;
 		Hex& Convert();
-		const Hex operator +(const Hex&);
-		const Hex operator -(const Hex&);
+		Hex operator +(const Hex&) const;
+		Hex operator -(const Hex&) const;
 		Hex& operator <<=(int);
 		Hex& operator >>=(int);
 		char Compare(const Hex&);
@@ -26,7 +26,5 @@ namespace Project3_2 {
 	char upper(const char);
 	char HexToChar(int);
 	int CharToHex(char);
-
-	void dialog(Hex&, Hex&);
 }
 #endif
