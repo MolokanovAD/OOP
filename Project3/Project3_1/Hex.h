@@ -8,7 +8,7 @@ namespace H16_1 {
 	private:
 		unsigned char length;
 		char number[len];
-		void setN(char*);
+		void pushN(char*);
 	public:
 		Hex();
 		Hex(char*);
