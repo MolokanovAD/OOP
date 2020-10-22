@@ -10,7 +10,7 @@ namespace H16_1 {
 	}
 	Hex::Hex(char* a) { //Инициализирующий конструктор для инициализации строкой
 		try {
-			setN(a);
+			pushN(a);
 		}
 		catch (std::exception & a) {
 			throw std::exception("Wrong data");
@@ -36,7 +36,7 @@ namespace H16_1 {
 		if (!length)
 			length = 1;
 	}
-	void Hex::setN(char* a) {
+	void Hex::pushN(char* a) {
 		int leng = strlen(a), i = 0;
 		if (!leng)
 			throw std::exception("Wrong data");
@@ -226,7 +226,7 @@ namespace H16_1 {
 				scanf_s("%*c");
 		} while (n > 0);
 		try {
-			setN(s);
+			pushN(s);
 		}
 		catch (std::exception & a) {
 			c.setstate(std::ios::failbit);
