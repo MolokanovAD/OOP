@@ -19,9 +19,9 @@ namespace H16_3 {
 		char getSign() const{ return number[0]; }
 		unsigned char Check() const;
 		Hex& Convert();
-		char Compare(const Hex&);
-		Hex operator +(const Hex&);
-		Hex operator -(const Hex&);
+		char Compare(const Hex&) const;
+		Hex operator +(const Hex&) const;
+		Hex operator -(const Hex&) const;
 		Hex& operator <<=(int);
 		Hex& operator >>=(int);
 		Hex& operator =(const Hex&);
