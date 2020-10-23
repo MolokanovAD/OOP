@@ -112,7 +112,7 @@ namespace H16_3 {
 	unsigned char Hex::Check()const { //проверка четности
 		return CharToHex(number[length]) & 1;
 	}
-	char Hex::Compare(const Hex& N) {
+	char Hex::Compare(const Hex& N)const {
 		Hex S(N),F(*this);
 		if (number[0] < S.number[0]) //сначала проверка на разные знаки
 			return 1;
@@ -158,7 +158,7 @@ namespace H16_3 {
 			number[i] = '0';
 		return *this;
 	}
-	Hex Hex::operator +(const Hex& N) {
+	Hex Hex::operator +(const Hex& N) const {
 		Hex F(*this), Second(N);
 		if (Second.length == 1 && Second.number[1] == '0')//если второй операнд 0 возвращаем первый операнд
 			return F;
@@ -203,7 +203,7 @@ namespace H16_3 {
 		}
 		return res;
 	}
-	Hex Hex::operator -(const Hex& N) {
+	Hex Hex::operator -(const Hex& N) const {
 		Hex second = N, res;
 		if (second.number[0] == '0') //домножаем второй операнд на -1
 			second.number[0] = 'F';
