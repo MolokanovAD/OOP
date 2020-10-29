@@ -7,10 +7,9 @@ namespace H16_3 {
 	private:
 		int length;
 		char* number;
-		void pushN(char*);
 	public:
 		Hex();
-		Hex(char*);
+		Hex(char*, int);
 		Hex(const int);
 		Hex(const Hex&);
 		Hex(Hex &&);
