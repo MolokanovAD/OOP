@@ -2,10 +2,8 @@
 #include "Hex.h"
 #include "f.h"
 
-
 int main() {
-	H16_3::Hex a, b,m;
-	m = FF(a);
+	H16_3::Hex a, b;
 	bool flag = false;
 	while (!flag) {
 		std::cout << "Enter first hexadecimal value" << std::endl;
