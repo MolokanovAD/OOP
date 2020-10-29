@@ -1,7 +1,3 @@
-//
-// Created by Данил Морозов on 06/10/2020.
-//
-
 #ifndef LAB3BYTE1_BIGLONG_H
 #define LAB3BYTE1_BIGLONG_H
 #include <iostream>
@@ -13,28 +9,28 @@ namespace laba3bit1 {
 
     class Biglong {
         int length;
-        char value[MAX_LENGTH + 1]{};             //+ 1 для знака
+        char value[MAX_LENGTH + 1]{};             //+ 1 РґР»СЏ Р·РЅР°РєР°
     public:
-        //конструктры
-        Biglong();    //пустой конструктор    //дописать
-        explicit Biglong(long parameter);  //инициализайия через длинное целое
-        Biglong(const char* char_value);  //инициализация по строки
-        Biglong(const Biglong& biglong);        //копирующий конструктор
-        //геттеры
+        //РєРѕРЅСЃС‚СЂСѓРєС‚СЂС‹
+        Biglong();    //РїСѓСЃС‚РѕР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ    //РґРѕРїРёСЃР°С‚СЊ
+        explicit Biglong(long parameter);  //РёРЅРёС†РёР°Р»РёР·Р°Р№РёСЏ С‡РµСЂРµР· РґР»РёРЅРЅРѕРµ С†РµР»РѕРµ
+        Biglong(const char* char_value);  //РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїРѕ СЃС‚СЂРѕРєРё
+        Biglong(const Biglong& biglong);        //РєРѕРїРёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+        //РіРµС‚С‚РµСЂС‹
         int get_length() const { return length; };
         char get_one_char(int i) const { return value[i]; };
         int get_max_length() const { return MAX_LENGTH; };
-        //сеттеры
-        void set_one_char(int number, int value);    //переделать назначение строки
+        //СЃРµС‚С‚РµСЂС‹
+        void set_one_char(int number, int value);    //РїРµСЂРµРґРµР»Р°С‚СЊ РЅР°Р·РЅР°С‡РµРЅРёРµ СЃС‚СЂРѕРєРё
         void set_length(int new_length);       
-        void div10();    //выполнение операции “уменьшения числа в десять раз” (деление на 10 нацело)ы
-        void multi10();  //выполнение операции “увеличения числа в десять раз”
-        //часть с перегрузками
-        friend std::ostream& operator<<(std::ostream& ostream, const Biglong& biglong); //вывод в входной поток
-        friend std::istream& operator>>(std::istream& istream, Biglong& biglong); //ввод из входного потока
-        const Biglong operator~() const;//получение дополнительного кода числа ((*) с помощью перегруженного оператора ~ )
+        void div10();    //РІС‹РїРѕР»РЅРµРЅРёРµ РѕРїРµСЂР°С†РёРё вЂњСѓРјРµРЅСЊС€РµРЅРёСЏ С‡РёСЃР»Р° РІ РґРµСЃСЏС‚СЊ СЂР°Р·вЂќ (РґРµР»РµРЅРёРµ РЅР° 10 РЅР°С†РµР»Рѕ)С‹
+        void multi10();  //РІС‹РїРѕР»РЅРµРЅРёРµ РѕРїРµСЂР°С†РёРё вЂњСѓРІРµР»РёС‡РµРЅРёСЏ С‡РёСЃР»Р° РІ РґРµСЃСЏС‚СЊ СЂР°Р·вЂќ
+        //С‡Р°СЃС‚СЊ СЃ РїРµСЂРµРіСЂСѓР·РєР°РјРё
+        friend std::ostream& operator<<(std::ostream& ostream, const Biglong& biglong); //РІС‹РІРѕРґ РІ РІС…РѕРґРЅРѕР№ РїРѕС‚РѕРє
+        friend std::istream& operator>>(std::istream& istream, Biglong& biglong); //РІРІРѕРґ РёР· РІС…РѕРґРЅРѕРіРѕ РїРѕС‚РѕРєР°
+        const Biglong operator~() const;//РїРѕР»СѓС‡РµРЅРёРµ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕРіРѕ РєРѕРґР° С‡РёСЃР»Р° ((*) СЃ РїРѕРјРѕС‰СЊСЋ РїРµСЂРµРіСЂСѓР¶РµРЅРЅРѕРіРѕ РѕРїРµСЂР°С‚РѕСЂР° ~ )
         Biglong& operator ++();
-        const Biglong operator+(const Biglong& argumnet) const;    //выполнение операций сложения
+        const Biglong operator+(const Biglong& argumnet) const;    //РІС‹РїРѕР»РЅРµРЅРёРµ РѕРїРµСЂР°С†РёР№ СЃР»РѕР¶РµРЅРёСЏ
         const Biglong operator-(const Biglong& argument) const;
         Biglong operator=(const Biglong& argument);
     };
@@ -44,7 +40,7 @@ namespace laba3bit1 {
     int char_to_num(char a);
 
     template<class T>
-    double getNum(T& a) {                //проверочка ввода соответствующего типа данных
+    double getNum(T& a) {                //РїСЂРѕРІРµСЂРѕС‡РєР° РІРІРѕРґР° СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РµРіРѕ С‚РёРїР° РґР°РЅРЅС‹С…
         int i = 1;
         while (i == 1) {
             std::cin.clear();
@@ -54,7 +50,7 @@ namespace laba3bit1 {
                 i = 1;
             else
                 i = 0;
-            if (i != 0) std::cout << "Вы ввели неприемлимое значение, повторите ввод" << std::endl;
+            if (i != 0) std::cout << "Р’С‹ РІРІРµР»Рё РЅРµРїСЂРёРµРјР»РёРјРѕРµ Р·РЅР°С‡РµРЅРёРµ, РїРѕРІС‚РѕСЂРёС‚Рµ РІРІРѕРґ" << std::endl;
         }
         return 0;
     }
