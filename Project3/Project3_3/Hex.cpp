@@ -9,12 +9,45 @@ namespace H16_3 {
 		number[0] = '0';
 		number[1] = '0';
 	}
-	Hex::Hex(char* a) {//Инициализирующий конструктор для инициализации строкой
+	Hex::Hex(char* a, int leng) {//Инициализирующий конструктор для инициализации строкой
+		int i = 0;
+		char sign = '0';
+		switch (a[0]) {//Проверка знака
+		case '+':
+			i++;
+			break;
+		case '-':
+			sign = 'F';
+			i++;
+			break;
+		default:
+			sign = '0';
+		}
+		if (a[i] == '0' && a[i + 1] == 'x')
+			i += 2;
+		while (a[i] == '0')//проверка ввода числа, начинающегося с 0
+			i += 1;
+		int size = leng - i + 1;
+		if (size > 32)
+			size = 32;
 		try {
-			pushN(a);
+			number = new char[size];
 		}
 		catch (std::exception & a) {
-			throw std::exception("Wrong data");
+			throw std::exception("Memory allocation error");
+		}
+		number[0] = sign;
+		int ll = 1;
+		length = size - 1;
+		for (; ll < size; i++, ll++) {
+			a[i] = upper(a[i]); //проверка регистра
+			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//проверка попадания символа в диапазон шестнадцатиричных цифр
+				throw std::exception("Invalid symbol");
+			number[ll] = a[i];
+		}
+		if ((number[0] == 'F' && length == 1 && number[1] == '0') || !length) {
+			Hex c;
+			*this = c;
 		}
 	}
 	Hex::Hex(const int A) { //Инициализирующий конструктор для инициализации константой
@@ -69,45 +102,6 @@ namespace H16_3 {
 			number[i] = '0';
 		length += k;
 		delete[] a;
-	}
-	void Hex::pushN(char* a) {
-		int leng = strlen(a), i = 0;
-		char sign = '0';
-		switch (a[0]) {//Проверка знака
-		case '+':
-			i++;
-			break;
-		case '-':
-			sign = 'F';
-			i++;
-			break;
-		default:
-			sign = '0';
-		}
-		if (a[i] == '0' && a[i + 1] == 'x')
-			i += 2;
-		while (a[i] == '0')//проверка ввода числа, начинающегося с 0
-			i += 1;
-		int size = leng - i + 1;
-		try {
-			number = new char[size];
-		}
-		catch (std::exception & a) {
-			throw std::exception("Memory allocation error");
-		}
-		number[0] = sign;
-		int ll = 1;
-		length = size - 1;
-		for (; i < leng; i++, ll++) {
-			a[i] = upper(a[i]); //проверка регистра
-			if ((a[i] < '0' || ('9' < a[i] && a[i] < 'A') || 'F' < a[i]))//проверка попадания символа в диапазон шестнадцатиричных цифр
-				throw std::exception("Invalid symbol");
-			number[ll] = a[i];
-		}
-		if ((number[0] == 'F' && length == 1 && number[1] == '0') || !length) {
-			Hex c;
-			*this = c;
-		}
 	}
 	unsigned char Hex::Check()const { //проверка четности
 		return CharToHex(number[length]) & 1;
@@ -236,6 +230,7 @@ namespace H16_3 {
 			number[i] = buf[i];
 		for (; i <= length; i++)
 			number[i] = '0';
+		delete[] buf;
 		return *this;
 	}
 	Hex& Hex::operator >>=(int a) {
@@ -258,12 +253,12 @@ namespace H16_3 {
 		}
 		for (int i = 0; i <= length; i++)
 			number[i] = buf[i];
+		delete[] buf;
 		return *this;
 	}
 	Hex& Hex::operator =(const Hex& A) {
 		//std::cout << "Copying = works" << std::endl;
 		length = A.length;
-		delete[] number;
 		number = new char[length + 1];
 		for (int i = 0; i <= length; i++)
 			number[i] = A.number[i];
@@ -277,31 +272,18 @@ namespace H16_3 {
 		return *this;
 	}
 	std::istream& operator >>(std::istream& c, Hex& El) {
-		char* s = (char*)malloc(1), buf[35];
-		int n = 0, l = 0;
-		s[0] = '\0';
-		do {
-			n = scanf_s("%34[^\n]", buf, 35);
-			if (n < 0)
-			{
-				free(s);
-			}
-			if (n > 0) {
-				l += strlen(buf);
-				try {
-					s = (char*)realloc(s, l + 1);
-				}
-				catch (std::exception & a) {
-					c.setstate(std::ios::failbit);
-					return c;
-				}
-				strcat_s(s, l + 1, buf);
-			}
-			else
-				scanf_s("%*c");
-		} while (n > 0);
+		char s[35],first;
+		c >> first;
+		s[0] = first;
+		int i = 1;
+		for(;i<35 && c.rdbuf()->in_avail();i++)
+			c.get(s[i]);
+		while (c.rdbuf()->in_avail()>1) {
+			c >> first;
+		}
 		try {
-			El.pushN(s);
+			Hex a(s, i-1);
+			El = a;
 		}
 		catch (std::exception & a) {
 			c.setstate(std::ios::failbit);
