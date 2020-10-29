@@ -1,5 +1,5 @@
 //
-// Created by Данил Морозов on 06/10/2020.
+// Created by Г„Г Г­ГЁГ« ГЊГ®Г°Г®Г§Г®Гў on 06/10/2020.
 //
 
 #include "biglong.h"
@@ -34,7 +34,7 @@ namespace laba3bit1 {
         try {
             while (parametr_copy > 0) {
                 if (MAX_LENGTH - counter < 1)
-                    throw std::range_error("подано слишком большое значение long");
+                    throw std::range_error("РїРѕРґР°РЅРѕ СЃР»РёС€РєРѕРј Р±РѕР»СЊС€РѕРµ Р·РЅР°С‡РµРЅРёРµ long");
                 Biglong::value[MAX_LENGTH - counter] = num_to_char(int(parametr_copy % 10));
                 parametr_copy = parametr_copy / 10;
                 ++counter;
@@ -62,7 +62,7 @@ namespace laba3bit1 {
             value[0] = '0';
             try {
                 if ((char_value[0] < '0') || (char_value[0] > '9')) {
-                    throw std::range_error("Попытка инициализировать класс некорректной строкой");
+                    throw std::range_error("РџРѕРїС‹С‚РєР° РёРЅРёС†РёР°Р»РёР·РёСЂРѕРІР°С‚СЊ РєР»Р°СЃСЃ РЅРµРєРѕСЂСЂРµРєС‚РЅРѕР№ СЃС‚СЂРѕРєРѕР№");
                 }
             }
             catch (std::range_error & error) {
@@ -71,7 +71,7 @@ namespace laba3bit1 {
         }
         try {
             if (i > MAX_LENGTH)
-                throw std::range_error("попытка присвоить объекту слишком длинной строки");
+                throw std::range_error("РїРѕРїС‹С‚РєР° РїСЂРёСЃРІРѕРёС‚СЊ РѕР±СЉРµРєС‚Сѓ СЃР»РёС€РєРѕРј РґР»РёРЅРЅРѕР№ СЃС‚СЂРѕРєРё");
         }
         catch (std::range_error & error) {
             std::cerr << error.what() << std::endl;
@@ -86,8 +86,8 @@ namespace laba3bit1 {
 
                 }
                 else {
-                    std::cout << "В строке встретился не числовой символ" << std::endl;
-                    throw std::range_error("В строке встретился не числовой символ");
+                    std::cout << "Р’ СЃС‚СЂРѕРєРµ РІСЃС‚СЂРµС‚РёР»СЃСЏ РЅРµ С‡РёСЃР»РѕРІРѕР№ СЃРёРјРІРѕР»" << std::endl;
+                    throw std::range_error("Р’ СЃС‚СЂРѕРєРµ РІСЃС‚СЂРµС‚РёР»СЃСЏ РЅРµ С‡РёСЃР»РѕРІРѕР№ СЃРёРјРІРѕР»");
                 }
             }
         }
@@ -127,12 +127,12 @@ namespace laba3bit1 {
 
 
 
-    //----------------------------------------------------------------------тут пошла часть с перегрузками-----------------
+    //----------------------------------------------------------------------С‚СѓС‚ РїРѕС€Р»Р° С‡Р°СЃС‚СЊ СЃ РїРµСЂРµРіСЂСѓР·РєР°РјРё-----------------
 
 
-    //вывод класса в поток
+    //РІС‹РІРѕРґ РєР»Р°СЃСЃР° РІ РїРѕС‚РѕРє
     std::ostream& operator<<(std::ostream& stream, const laba3bit1::Biglong& biglong) {
-        //std::cout << "я тут2";
+        //std::cout << "СЏ С‚СѓС‚2";
         int i = 1;
         if (biglong.get_one_char(0) == '9')
             stream << "-";
@@ -140,7 +140,7 @@ namespace laba3bit1 {
             stream << biglong.get_one_char(i);
             ++i;
         }
-        stream << std::endl;
+       // stream << std::endl;
         return stream;
     }
 
@@ -153,12 +153,12 @@ namespace laba3bit1 {
             //std::cout << "tut" << std::endl;
             //char streamer[MAX_LENGTH + 1];
             char* streamer = readln();
-            //istream >> streamer;                                                //здесь может быть считывание нормальной строки
+            //istream >> streamer;                                                //Р·РґРµСЃСЊ РјРѕР¶РµС‚ Р±С‹С‚СЊ СЃС‡РёС‚С‹РІР°РЅРёРµ РЅРѕСЂРјР°Р»СЊРЅРѕР№ СЃС‚СЂРѕРєРё
             int i = int(strlen(streamer)), j = 0;
             if (i > biglong.get_max_length())
                 throw std::range_error("the string is too long");
             if (streamer[0] == '-') {
-                biglong.set_one_char(0, 1);
+                biglong.set_one_char(0, 9);
                 j++;
                 --i;
             }
@@ -189,7 +189,7 @@ namespace laba3bit1 {
 
     }
 
-    const Biglong Biglong::operator~() const {                      //здесь еще нужно написать прибавление единички
+    const Biglong Biglong::operator~() const {                      //Р·РґРµСЃСЊ РµС‰Рµ РЅСѓР¶РЅРѕ РЅР°РїРёСЃР°С‚СЊ РїСЂРёР±Р°РІР»РµРЅРёРµ РµРґРёРЅРёС‡РєРё
         Biglong newest(*this);
         if ((newest.get_one_char(0) == '9') || (newest.get_one_char(0) == '1')) {
             newest.set_one_char(0, 9);
@@ -204,9 +204,11 @@ namespace laba3bit1 {
 
     Biglong& Biglong::operator++() {
         int a = 0, ostatok = 1, i = MAX_LENGTH;
-        while ((i > 0)& (ostatok > 0)) {
+        if (get_one_char(0) == '9')
+            ostatok = -1;
+        while ((i > 0)& (ostatok != 0)) {
             a = char_to_num(value[i]);
-            a = ostatok + a;
+            a = a + ostatok;
             value[i] = num_to_char(a % 10);
             ostatok = a / 10;
             --i;
@@ -268,7 +270,7 @@ namespace laba3bit1 {
     void Biglong::set_length(int new_length) {
         try {
             if (new_length < 0)
-                throw std::range_error("Неприемлимая длина строки");
+                throw std::range_error("РќРµРїСЂРёРµРјР»РёРјР°СЏ РґР»РёРЅР° СЃС‚СЂРѕРєРё");
             Biglong::length = new_length;
         }
         catch (std::range_error & error) {
@@ -300,7 +302,7 @@ namespace laba3bit1 {
     char* readln(void) {
         fseek(stdin, 0, SEEK_END);
 
-        //   printf("введите информацию\n");
+        //   printf("РІРІРµРґРёС‚Рµ РёРЅС„РѕСЂРјР°С†РёСЋ\n");
         char* ptr = (char*)malloc(1);
         *ptr = '\0';
         char buf[101];
