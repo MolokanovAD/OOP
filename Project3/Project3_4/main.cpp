@@ -16,19 +16,47 @@ void out_down() {
         std::endl << "|     4     |     5     |     6     |     -     |" <<
         std::endl << "|___________|___________|___________|___________|" <<
         std::endl << "|           |           |           |           |" <<
-        std::endl << "|     1     |     2     |     3     |      /    |" <<
+        std::endl << "|     1     |     2     |     3     |    /10    |" <<
         std::endl << "|___________|___________|___________|___________|" <<
         std::endl << "|           |           |           |           |" <<
-        std::endl << "|     ~     |     0     |     ++    |      *    |" <<
+        std::endl << "|     ~     |     0     |     ++    |    *10    |" <<
         std::endl << "|___________|___________|___________|___________|" << std::endl;
+}
+void out(laba3bit1::Biglong a,const char* m) {
+    if (a.get_one_char(0) == '0')
+        std::cout << " ";
+    std::cout << a << m;
+}
+void fix_length_1_operand(laba3bit1::Biglong a,const char* msg) {
+    out_up(msg);
+    std::cout << "|                                   ";
+    out(a, " |");
+    std::cout << std::endl;
+    out_down();
+}
+
+void multi_f(laba3bit1::Biglong a,int k) {
+    out_up("            ");
+    std::cout << "|               ";
+    if (k == 1) {
+        out(a, " * 10  = ");
+        a.multi10();
+    }
+    else {
+        out(a, " / 10  = ");
+        a.div10();
+    }
+    out(a, " |");
+    std::cout << std::endl;
+    out_down();
 }
 int main() {
     
 	laba3bit1::Biglong a, b,c;
-	bool flag = false;
-	while (!flag) {
+	bool flag = false, flag2 = false;
+    while (!flag) {
         out_up("Enter number");
-        std::cout << "|                                               |" <<std::endl;
+        std::cout << "|                                               |" << std::endl;
         out_down();
         try {
             std::cin >> a;
@@ -37,12 +65,8 @@ int main() {
             flag = true;
             continue;
         }
-        out_up("Enter sign  ");
-        std::cout << "|                                   ";
-        if (a.get_one_char(0) == '0')
-            std::cout << " ";
-        std::cout << a << " |" << std::endl;
-        out_down();
+        while (!flag2){
+        fix_length_1_operand(a, "Enter sign  ");
         char sign;
         std::cin >> sign;
         switch (sign) {
@@ -50,34 +74,15 @@ int main() {
             c = ~a;
             out_up("            ");
             std::cout << "|                   ~";
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a << "  = " << c << " |" << std::endl;
+            out(a, "  = ");
+            std::cout << c << " |" << std::endl;
             out_down();
             break;
         case '*':
-            out_up("            ");
-            std::cout << "|               ";
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a << " * 10  = ";
-            a.multi10();
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a << " |" << std::endl;
-            out_down();
+            multi_f(a, 1);
             break;
         case '/':
-            out_up("            ");
-            std::cout << "|               ";
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a << " / 10  = ";
-            a.div10();
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a << " |" << std::endl;
-            out_down();
+            multi_f(a, 0);
             break;
         case '+':
             if (std::cin.rdbuf()->in_avail() > 1) {
@@ -85,55 +90,18 @@ int main() {
                 if (sign == '+') {
                     out_up("            ");
                     std::cout << "|              ";
-                    if (a.get_one_char(0) == '0')
-                        std::cout << " ";
-                    std::cout << a << "  +  1  = ";
+                    out(a, "  +  1  = ");
                     ++a;
-                    if(a.get_one_char(0) == '0')
-                        std::cout << " ";
-                    std::cout << a << " |" << std::endl;
+                    out(a, " |");
+                    std::cout << std::endl;
                     out_down();
                     break;
                 }
             }
             out_up("Enter number");
             std::cout << "|                                 ";
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a << " + |" << std::endl;
-            out_down();
-            try {
-               std::cin >> b;
-            }
-            catch (std::exception & a) {
-               flag = true;
-               continue;
-            }
-            out_up("            ");
-            std::cout << "|  ";
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a;
-            if (b.get_one_char(0) == '0') {
-                std::cout << "  +  ";
-                std::cout << b << "  =  ";
-            }
-            else {
-                std::cout << "  +(";
-                std::cout << b << ") =  ";
-            }
-            c = a + b;
-            if (c.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << c << "   |" << std::endl;
-            out_down();
-            break;
-        case '-':
-            out_up("Enter number");
-            std::cout << "|                                 ";
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a << " + |" << std::endl;
+            out(a, " + |");
+            std::cout << std::endl;
             out_down();
             try {
                 std::cin >> b;
@@ -144,9 +112,44 @@ int main() {
             }
             out_up("            ");
             std::cout << "|  ";
-            if (a.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << a;
+            out(a, "");
+            if (b.get_one_char(0) == '0') {
+                std::cout << "  +  ";
+                std::cout << b << "  =  ";
+            }
+            else {
+                std::cout << "  +(";
+                std::cout << b << ") =  ";
+            }
+            try {
+                c = a + b;
+            }
+            catch (std::exception & a) {
+                std::cout << a.what();
+                std::cout << "      |" << std::endl;
+                out_down();
+                break;
+            }
+            out(c, "   |");
+            std::cout << std::endl;
+            out_down();
+            break;
+        case '-':
+            out_up("Enter number");
+            std::cout << "|                                 ";
+            out(a, " - |");
+            std::cout << std::endl;
+            out_down();
+            try {
+                std::cin >> b;
+            }
+            catch (std::exception & a) {
+                flag = true;
+                continue;
+            }
+            out_up("            ");
+            std::cout << "|  ";
+            out(a, "");
             if (b.get_one_char(0) == '0') {
                 std::cout << "  -  ";
                 std::cout << b << "  =  ";
@@ -155,15 +158,32 @@ int main() {
                 std::cout << "  -(";
                 std::cout << b << ") =  ";
             }
-            c = a - b;
-            if (c.get_one_char(0) == '0')
-                std::cout << " ";
-            std::cout << c << "   |" << std::endl;
+            try {
+                c = a - b;
+            }
+            catch (std::exception & a) {
+                std::cout << a.what();
+                std::cout << "      |" << std::endl;
+                out_down();
+                break;
+            }
+            out(c, "   |");
+            std::cout << std::endl;
             out_down();
             break;
         default:
-            std::cout << "Wrong sign, repeat please!" << std::endl;
+            std::cout << "Wrong sign!" << std::endl;
         }
+        while (std::cin.rdbuf()->in_avail() > 1)
+            std::cin >> sign;
+        std::cout << "Press = to work with the result" << std::endl;
+        char s;
+        std::cin >> s;
+        if (s != '=')
+            flag2 = true;
+        else
+            a = c;
+    }
         std::cout << "Press 0 to enter new numbers and any other button to exit" << std::endl;
         std::cin >> flag;
 	}
