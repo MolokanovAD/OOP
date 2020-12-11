@@ -1,18 +1,18 @@
 #ifndef _OTHERVECTOR_
 #define  _OTHERVECTOR_
 /*!
-	\brief	Минимальная длина массива.
-	Для того чтобы избежать частого изменения размера массива при надобности увеличить его произойдет увеличение на 4 ячейки.
+	\brief	РњРёРЅРёРјР°Р»СЊРЅР°СЏ РґР»РёРЅР° РјР°СЃСЃРёРІР°.
+	Р”Р»СЏ С‚РѕРіРѕ С‡С‚РѕР±С‹ РёР·Р±РµР¶Р°С‚СЊ С‡Р°СЃС‚РѕРіРѕ РёР·РјРµРЅРµРЅРёСЏ СЂР°Р·РјРµСЂР° РјР°СЃСЃРёРІР° РїСЂРё РЅР°РґРѕР±РЅРѕСЃС‚Рё СѓРІРµР»РёС‡РёС‚СЊ РµРіРѕ РїСЂРѕРёР·РѕР№РґРµС‚ СѓРІРµР»РёС‡РµРЅРёРµ РЅР° 4 СЏС‡РµР№РєРё.
 */
 #define min_cap 4
 
 /*!
-	\brief Итератор для other_vector.
+	\brief РС‚РµСЂР°С‚РѕСЂ РґР»СЏ other_vector.
 */
 template <class T>
 class other_iterator;
 /*!
-	\brief Шаблон вектора other_vector.
+	\brief РЁР°Р±Р»РѕРЅ РІРµРєС‚РѕСЂР° other_vector.
 */
 template <class T>
 class other_vector {
@@ -22,13 +22,13 @@ private:
 	T* data;
 public:
 	/*!
-	\brief Инициализирующий конструктор.
-	Выделяется память под 4 объекта .
+	\brief РРЅРёС†РёР°Р»РёР·РёСЂСѓСЋС‰РёР№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ.
+	Р’С‹РґРµР»СЏРµС‚СЃСЏ РїР°РјСЏС‚СЊ РїРѕРґ 4 РѕР±СЉРµРєС‚Р° .
 	*/
 	other_vector() :s(0), capacity(min_cap), data(new T[min_cap]) {}
 	other_vector(const other_vector<T>&);
 	other_vector(other_vector<T>&&);
-	~other_vector() { delete[] data; }
+	~other_vector();
 	size_t size() const{ return s; }
 	bool empty() { return !s; }
 	void resize(size_t);
@@ -89,6 +89,11 @@ other_vector<T>::other_vector(other_vector<T>&& a) {
 	capacity = a.capacity;
 }
 
+template <class T>
+other_vector<T>::~other_vector(){ 
+	if(capacity > 0)
+		delete[] data; 
+}
 
 template <class T>
 void other_vector<T>::resize(size_t new_capacity) {
@@ -173,9 +178,11 @@ size_t other_vector<T>::erase(size_t position) {
 
 template <class T>
 void other_vector<T>::clear() {
-	delete[] data;
-	s = 0;
-	capacity = 0;
+	if (capacity > 0) {
+		delete[] data;
+		s = 0;
+		capacity = 0;
+	}
 }
 
 
