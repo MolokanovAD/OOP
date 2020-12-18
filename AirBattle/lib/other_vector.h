@@ -1,17 +1,17 @@
 #ifndef _OTHERVECTOR_
 #define  _OTHERVECTOR_
 /*!
-	\brief	Минимальная длина массива.
-	Для того чтобы избежать частого изменения размера массива при надобности увеличить его произойдет увеличение на 4 ячейки.
+	\brief	ГЊГЁГ­ГЁГ¬Г Г«ГјГ­Г Гї Г¤Г«ГЁГ­Г  Г¬Г Г±Г±ГЁГўГ .
+	Г„Г«Гї ГІГ®ГЈГ® Г·ГІГ®ГЎГ» ГЁГ§ГЎГҐГ¦Г ГІГј Г·Г Г±ГІГ®ГЈГ® ГЁГ§Г¬ГҐГ­ГҐГ­ГЁГї Г°Г Г§Г¬ГҐГ°Г  Г¬Г Г±Г±ГЁГўГ  ГЇГ°ГЁ Г­Г Г¤Г®ГЎГ­Г®Г±ГІГЁ ГіГўГҐГ«ГЁГ·ГЁГІГј ГҐГЈГ® ГЇГ°Г®ГЁГ§Г®Г©Г¤ГҐГІ ГіГўГҐГ«ГЁГ·ГҐГ­ГЁГҐ Г­Г  4 ГїГ·ГҐГ©ГЄГЁ.
 */
 #include <memory>
 /*!
-	\brief Итератор для other_vector.
+	\brief Г€ГІГҐГ°Г ГІГ®Г° Г¤Г«Гї other_vector.
 */
 template <class T>
 class other_iterator;
 /*!
-	\brief Шаблон вектора other_vector.
+	\brief ГГ ГЎГ«Г®Г­ ГўГҐГЄГІГ®Г°Г  other_vector.
 */
 template <class T>
 class other_vector {
@@ -23,8 +23,8 @@ private:
 	std::allocator<T> allocator;
 public:
 	/*!
-	\brief Инициализирующий конструктор.
-	Выделяется память под 4 объекта .
+	\brief Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§ГЁГ°ГіГѕГ№ГЁГ© ГЄГ®Г­Г±ГІГ°ГіГЄГІГ®Г°.
+	Г‚Г»Г¤ГҐГ«ГїГҐГІГ±Гї ГЇГ Г¬ГїГІГј ГЇГ®Г¤ 4 Г®ГЎГєГҐГЄГІГ  .
 	*/
 	other_vector() :s(0), capacity(min_cap), data(allocator.allocate(min_cap)) {}
 	other_vector(const other_vector<T>&);
@@ -106,6 +106,7 @@ void other_vector<T>::resize(size_t new_capacity) {
 			s = new_capacity;
 		for (size_t i = 0; i < s; i++)
 			data[i] = std::move(buf[i]);
+		delete[] buf;
 	}
 }
 
@@ -126,7 +127,7 @@ void other_vector<T>::push_back(T&& a) {
 }
 
 template <class T>
-other_vector<T>& other_vector<T>::operator =(const other_vector<T>& a) {//был делит
+other_vector<T>& other_vector<T>::operator =(const other_vector<T>& a) {//ГЎГ»Г« Г¤ГҐГ«ГЁГІ
 	resize(a.capacity);
 	std::copy(a.begin(), a.end(), data);
 	return *this;
