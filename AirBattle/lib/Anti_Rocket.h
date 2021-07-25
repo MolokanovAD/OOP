@@ -1,8 +1,6 @@
 #ifndef _ANTI_ROCKET_H_
 #define _ANTI_ROCKET_H_
 #include "Plane.h"
-
-
 #define G 3
 #define L 6
 /*!
